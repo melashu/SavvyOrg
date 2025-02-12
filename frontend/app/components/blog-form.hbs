@@ -1,0 +1,10 @@
+<div class="p-4 bg-gray-100 rounded-lg">
+    <h2 class="text-2xl font-bold mb-4">Create Blog</h2>
+    <form {{on "submit" this.submitBlog}}>
+        <input type="text" placeholder="Title" class="w-full p-2 mb-2 border rounded" {{on "input" this.updateTitle}}>
+        <textarea placeholder="Content" class="w-full p-2 mb-2 border rounded" {{on "input"
+            this.updateContent}}></textarea>
+        <input type="text" placeholder="Author" class="w-full p-2 mb-2 border rounded" {{on "input" this.updateAuthor}}>
+        <button class="bg-blue-500 text-white px-4 py-2 rounded" type="submit">Submit</button>
+    </form>
+</div>

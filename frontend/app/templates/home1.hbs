@@ -1,0 +1,70 @@
+<section class="bg-gray-50">
+    <div
+        class="flex flex-row md:flex-row w-full bg-white dark:bg-gray-900 sm:gap-8 md:gap-8 lg:gap-16 dark:text-white px-6 py-12 md:px-32 md:py-24">
+        {{!-- Image Section --}}
+        <div class="md:w-1/2 flex justify-center items-center">
+            <img class="rounded-lg shadow-lg lg:ml-4 xl:ml-10 transition-transform transform hover:scale-105 duration-300"
+                src="/images/blog1.jpg" alt="Blog Image 1" width="800" height="800" />
+        </div>
+
+        {{!-- Text Section --}}
+        <div class="md:w-1/2 mt-8 md:mt-0 flex flex-col justify-center lg:mr-10 xl:mr-10">
+            <h1 class="text-5xl font-extrabold text-gray-900 dark:text-white mb-4 leading-tight">
+                Let’s make your product and team a
+                <span className="bg-gradient-to-r from-yellow-400 to-red-500 text-transparent bg-clip-text">
+                    success
+                </span>
+            </h1>
+            <p class="text-lg text-gray-600 dark:text-gray-300 mb-6">
+                <span className="bg-gradient-to-r from-yellow-400 to-red-500 text-transparent bg-clip-text">
+                    Savvy Bridge
+                </span>
+                is your expert partner for strategy, design, product management, and development. We bring digital
+                products
+                from idea to success and teach you how because we care.
+            </p>
+
+            {{!-- Flowbite Button --}}
+            <button class="text-lg py-3 px-8 w-36 rounded-full"
+                style="transition: all 200ms ease-in-out; background: linear-gradient(to right, #f00, #ff0); color: white; transform: scale(1);"
+                onmouseenter="this.style.background = 'rgba(252, 211, 77, 1)'; this.style.color = 'black'; this.style.transform = 'scale(1.2)';"
+                onmouseleave="this.style.background = 'linear-gradient(to right, #f00, #ff0)'; this.style.color = 'white'; this.style.transform = 'scale(1)';"
+                type="button" {{on "click" this.toggleModal}}>
+                Let’s talk
+            </button>
+        </div>
+    </div>
+
+    {{!-- Services Section --}}
+    <div class="mt-20 grid grid-cols-1 md:grid-cols-3 gap-10 px-6">
+        <div class="bg-white p-8 rounded-lg shadow-lg">
+            <h3 class="text-2xl font-semibold text-gray-800">Strategy & Design</h3>
+            <p class="text-gray-600 mt-4">We guide you through the process of bringing your product to life with clarity
+                and efficiency.</p>
+        </div>
+        <div class="bg-white p-8 rounded-lg shadow-lg">
+            <h3 class="text-2xl font-semibold text-gray-800">Product Management</h3>
+            <p class="text-gray-600 mt-4">Our experts help in overseeing all stages of the product’s lifecycle.</p>
+        </div>
+        <div class="bg-white p-8 rounded-lg shadow-lg">
+            <h3 class="text-2xl font-semibold text-gray-800">Development</h3>
+            <p class="text-gray-600 mt-4">From backend to frontend, we build your product with the latest technologies.
+            </p>
+        </div>
+    </div>
+
+    {{!-- Testimonials Section --}}
+    <div class="mt-20 px-6">
+        <h3 class="text-3xl text-center font-semibold mb-6">What Our Clients Say</h3>
+        <TestimonyCarousel />
+
+        {{!--
+        <Carousel @slides={{array (hash image="/images/profile.jpg" alt="Slide 1" ) (hash image="/images/profile.jpg"
+            alt="Slide 2" ) (hash image="/images/profile.jpg" alt="Slide 3" ) }} /> --}}
+        {{!--
+        <Carousel @slides={{array (hash image="/images/profile.jpg" alt="First Slide" ) (hash
+            image="/images/profile.jpg" alt="Second Slide" ) (hash image="/images/profile.jpg" alt="Third Slide" ) }} />
+        --}}
+
+    </div>
+</section>

@@ -1,0 +1,55 @@
+<div class="flex flex-col flex-1">
+<InternalHeader />
+<div class="flex flex-row h-screen bg-gray-50 grow">
+    <aside class="w-1/4 max-w-xs bg-white border-r border-gray-300 overflow-y-auto">
+        <h2 class="text-lg font-semibold p-4 border-b">Chats</h2>
+        <ul class="divide-y">
+            {{#if this.users.length}}
+            {{#each this.users as |user|}}
+<li class="flex items-center p-3 cursor-pointer hover:bg-blue-50 transition {{if (eq this.selectedUser user.email) 'bg-blue-100'}}"
+    {{on 'click' (fn this.selectUser user.email user.name)}}>
+    <div class="w-10 h-10 bg-gray-300 rounded-full mr-3 flex items-center justify-center text-white text-lg">
+        {{#if user.email}}
+        {{first-letter user.name}}
+        {{else}}
+        ?
+        {{/if}}
+    </div>
+    <div>
+        <p class="font-medium">{{user.name}}</p>
+        <p class="text-sm text-gray-500">Online</p>
+    </div>
+</li>
+
+            {{/each}}
+            {{else}}
+            <p class="p-4 text-center">No users available</p>
+            {{/if}}
+        </ul>
+    </aside>
+
+    <div class="flex flex-col w-3/4">
+        <main class="p-4 overflow-y-auto bg-[#EDEDED] flex-grow">
+            <h2 class="text-lg font-semibold mb-2">Chat with {{this.selectedUserName}}</h2>
+            <div class="space-y-2">
+                {{#each this.filteredMessages as |msg|}}
+                <div class="flex {{if (eq msg.senderEmail this.sender) 'justify-end' 'justify-start'}}">
+                    <div
+                        class="p-3 rounded-xl max-w-xs {{if (eq msg.senderEmail this.sender) 'bg-blue-500 text-white' 'bg-white text-gray-700'}}">
+                        {{msg.text}}
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </main>
+
+        <form {{on 'submit' this.sendMessage}} class="flex items-center p-4 bg-white border-t border-gray-300">
+            <input type="text" placeholder="Type a message" value={{this.text}} {{on 'input' this.updateText}}
+                class="flex-grow px-4 py-3 border rounded-full outline-none focus:ring-2 focus:ring-blue-400" />
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 ml-2">
+                send
+            </button>
+        </form>
+    </div>
+</div>
+</div>

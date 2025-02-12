@@ -1,0 +1,132 @@
+<div class="p-6 grow overflow-x-hidden">
+    {{!-- Statistics Cards --}}
+    <div class="px-16 grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div class="px-6 py-2 bg-white shadow-lg rounded-lg text-center">
+            <h3 class="text-gray-600 text-sm font-medium mb-2">Total Admins</h3>
+            <div class="text-lg font-semibold text-gray-800">{{ this.totalAdmins }}</div>
+            <div class="text-gray-500">{{ this.totalAdmins }} admins</div>
+        </div>
+        <div class="px-6 py-2 bg-white shadow-lg rounded-lg text-center">
+            <h3 class="text-gray-600 text-sm font-medium mb-2">Total Authors</h3>
+            <div class="text-lg font-semibold text-gray-800">{{ this.totalAuthors }}</div>
+            <div class="text-gray-500">{{ this.totalAuthors }} authors</div>
+        </div>
+        <div class="px-6 py-2 bg-white shadow-lg rounded-lg text-center">
+            <h3 class="text-gray-600 text-sm font-medium mb-2">Total Customers</h3>
+            <div class="text-lg font-semibold text-gray-800">{{ this.totalCustomers }}</div>
+            <div class="text-gray-500">{{ this.totalCustomers }} customers</div>
+        </div>
+    </div>
+
+    <div class="mx-auto px-6 mt-8">
+        <h1 class="text-3xl font-semibold text-center text-gray-800 mb-6">User List</h1>
+        <div class="flex justify-between">
+            {{!-- Search Input Field --}}
+            <div class="flex justify-between items-center">
+                <div class="relative">
+                    <input type="text" placeholder="Search users..."
+                        class="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        {{on 'input' this.handleSearch}} />
+                    <span class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500">
+                        <i class="fas fa-search"></i>
+                    </span>
+                </div>
+            </div>
+
+            <a href="archived_user_list" class="bg-blue-500 px-3 text-white rounded hover:bg-blue-600 transition">
+                View Archived Users
+            </a>
+        </div>
+
+        {{#if this.loading}}
+        <div class="flex justify-center items-center h-screen">
+            <div class="spinner-border inline-block w-8 h-8 border-4 rounded-full" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        {{else}}
+        <div class="overflow-x-auto w-full relative shadow-md sm:rounded-lg">
+            <table class="min-w-full text-sm text-left text-gray-500">
+                <thead class="bg-gray-100 sticky top-0 z-10 text-xs uppercase text-gray-700">
+                    <tr>
+                        <th class="px-4 py-3">Full Name</th>
+                        <th class="px-4 py-3">Email</th>
+                        <th class="px-4 py-3">Role</th>
+                        <th class="px-4 py-3">Status</th>
+                        <th class="px-4 py-3">Profile Picture</th>
+                        <th class="px-4 py-3 hidden lg:table-cell">Updated At</th>
+                        <th class="px-4 py-3">Action</th>
+                        <th class="px-4 py-3">Change Role</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {{#each this.users as |user|}}
+                    <tr class="hover:bg-gray-50 transition duration-300">
+                        <td class="px-4 py-3 text-gray-700">{{user.name}}</td>
+                        <td class="px-4 py-3">{{user.email}}</td>
+                        <td class="px-4 py-3">
+                            <span
+                                class="text-xs font-medium px-2.5 py-0.5 rounded-full {{if (eq user.role 'admin') 'bg-blue-100 text-blue-800' (if (eq user.role 'author') 'bg-green-100 text-green-800' 'bg-gray-100 text-gray-800')}}">
+                                {{user.role}}
+                            </span>
+                        </td>
+                        <td class="px-4 py-3">
+                            <span class="{{if user.isConfirmed 'text-green-500' 'text-red-500'}}">
+                                {{if user.isConfirmed 'Confirmed' 'Not Confirmed'}}
+                            </span>
+                        </td>
+                        <td class="px-4 py-3">
+                            <img src="{{if user.profilePic user.profilePic '/images/author_profile.png'}}"
+                                alt="{{user.name}}'s profile" class="w-12 h-12 rounded-full object-cover" />
+                        </td>
+                        <td class="px-4 py-3 hidden lg:table-cell">{{format-date user.updatedAt}}</td>
+                        <td class="px-4 py-3">
+                            <div class="flex gap-2 justify-center">
+                                {{!-- Archive Button --}}
+                                <button
+                                    class="flex items-center justify-center bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 hover:scale-105 transition transform duration-200 shadow-md"
+                                    type="button" {{on 'click' (fn this.handleArchive user._id user.name)}}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M12 20v-6m0 0v-6m0 6h6m-6 0H6" />
+                                    </svg>
+                                    Archive
+                                </button>
+
+                            </div>
+                        </td>
+                        <td class="px-4 py-3">
+                            <select data-user-id={{user._id}} value={{user.role}} {{on 'change' this.handleRoleChange}}
+                                class="border rounded-md py-1 px-2">
+                                <option value="customer" selected={{eq user.role "customer" }}>Customer</option>
+                                <option value="admin" selected={{eq user.role "admin" }}>Admin</option>
+                                <option value="author" selected={{eq user.role "author" }}>Author</option>
+                            </select>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+
+        {{!-- Pagination Controls --}}
+        <div class="flex justify-between items-center mt-4">
+            <p class="text-sm text-gray-600">Showing {{this.users.length}} of {{this.totalUsers}} users</p>
+            <div class="flex space-x-2">
+                <button disabled={{eq this.currentPage 1}}
+                    class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50" type="button"
+                    {{on 'click' this.handlePreviousPage}}>
+                    Previous
+                </button>
+                <span class="px-3 py-1">{{this.currentPage}} / {{this.totalPages}}</span>
+                <button disabled={{eq this.currentPage this.totalPages}}
+                    class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50" type="button"
+                    {{on 'click' this.handleNextPage}}>
+                    Next
+                </button>
+            </div>
+        </div>
+        {{/if}}
+    </div>
+</div>

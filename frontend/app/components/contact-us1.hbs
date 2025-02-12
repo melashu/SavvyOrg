@@ -1,0 +1,53 @@
+{{!-- app/components/contact-us.hbs --}}
+{{#if @openModal}}
+<div class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div class="relative bg-white dark:bg-[#021D4A] lg:max-w-md mx-auto p-6 rounded-md shadow-lg">
+        <button
+            class="absolute top-2 right-2 text-gray-500 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-100"
+            type="button" {{on "click" @onCloseModal}}>
+            ✖
+        </button>
+        <div class="space-y-2">
+            <h3 class="text-xl font-medium text-gray-900 dark:text-white text-center">
+                Contact Us
+            </h3>
+            {{#if this.error}}
+            <p class="text-red-500">{{this.error}}</p>
+            {{/if}}
+            {{#if this.success}}
+            <p class="text-green-500">{{this.success}}</p>
+            {{/if}}
+            <div class="space-y-4">
+                <div class="w-full">
+                    <label for="name" class="block text-sm font-medium text-gray-700 dark:text-white">Your Full
+                        Name</label>
+                    <input id="name" type="text" value={{this.name}} {{on "input" (fn (mut this.name)
+                        value="target.value" )}} required
+                        class="w-full border-gray-300 rounded-md dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                </div>
+                <div class="w-full">
+                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-white">Your
+                        email</label>
+                    <input id="email" type="email" value={{this.email}} {{on "input" (fn (mut this.email)
+                        value="target.value" )}} placeholder="your@name.com" required
+                        class="w-full border-gray-300 rounded-md dark:border-gray-600 dark:bg-gray-700 dark:text-white" />
+                </div>
+                <div class="w-full">
+                    <label for="message" class="block text-sm font-medium text-gray-700 dark:text-white">
+                        Tell us, how can we help you?
+                    </label>
+                    <textarea id="message"
+                        class="w-full border-gray-300 rounded-md dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                        placeholder="Enter your message here..." rows="4" value={{this.message}} {{on "input" (fn (mut
+                        this.message) value="target.value" )}} required></textarea>
+                </div>
+            </div>
+            <div class="w-full">
+                <button class="btn" type="button" {{on "click" this.handleSubmit}}>
+                    Send Message
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{{/if}}

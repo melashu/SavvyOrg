@@ -1,0 +1,42 @@
+<div class="py-12 bg-white">
+    <div class="container mx-auto px-4">
+        {{!-- Carousel Container --}}
+        <div class="overflow-hidden relative">
+            {{!-- Inner Flex Container for Carousel --}}
+            <div class="flex transition-transform duration-500 ease-in-out"
+                style="transform: translateX({{this.transformValue}}%);">
+                {{#each this.testimonies as |testimony|}}
+                <div class="p-4 w-full sm:w-1/2 lg:w-1/3 flex-shrink-0">
+                    <div class="p-6 shadow-md rounded-lg bg-white">
+                        <div class="flex justify-center mb-4">
+                            <img src="{{testimony.image}}" alt="{{testimony.name}}"
+                                class="w-16 h-16 rounded-full border-4 border-white shadow-md" />
+                        </div>
+                        <p class="mb-4 text-center italic">
+                            "{{testimony.testimony}}"
+                        </p>
+                        <h3 class="text-center font-semibold">
+                            {{testimony.name}}
+                        </h3>
+                        <span class="block text-center text-sm text-gray-500">
+                            {{testimony.role}}
+                        </span>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+
+        {{!-- Navigation Buttons --}}
+        <div class="flex justify-center mt-4 space-x-4">
+            <button class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                type="button" onclick={{this.previousSlide}} disabled={{this.isPrevDisabled}}>
+                Prev
+            </button>
+            <button class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                type="button" onclick={{this.nextSlide}} disabled={{this.isNextDisabled}}>
+                Next
+            </button>
+        </div>
+    </div>
+</div>

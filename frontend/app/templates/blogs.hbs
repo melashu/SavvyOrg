@@ -1,0 +1,55 @@
+{{#if (eq this.currentRouteName "blogs.index")}}
+<div class="bgcolor p-6">
+  {{#if this.isLoading}}
+        <div class="flex items-center justify-center h-screen">
+          <p class="text-lg font-semibold">Loading...</p>
+        </div>
+  {{else if this.errorMessage}}
+  <div class="text-center text-red-500 font-semibold">
+    {{this.errorMessage}}
+  </div>
+  {{else}}
+  <div class="space-y-6">
+    {{#each this.blogs as |blog|}}
+    <div class="bg-white rounded-lg shadow p-4 border border-gray-200">
+      <div class="flex items-center mb-4">
+        <img src="/images/author_profile.png" alt="Profile Photo"
+          class="w-12 h-12 rounded-full object-cover mr-4 border-2 border-blue-500" />
+        <span class="text-lg font-semibold cursor-pointer text-blue-600 hover:underline" {{on "click" (fn
+          this.handleAuthorClick blog.authorId._id)}}>
+          {{blog.authorId.name}}
+        </span>
+      </div>
+      <h2 class="text-lg font-semibold text-blue-600 mb-2">{{blog.title}}</h2>
+      <p class="text-sm text-gray-700 mb-4">
+        {{{truncate-words (sanitize-html blog.content) 20}}}
+      </p>
+      <p class="text-xs text-gray-500 mb-4">
+        {{format-date blog.createdAt}}
+      </p>
+      {{!-- Read More Link --}}
+      <a href="/blogs/detail/{{blog._id}}" class="text-blue-500 hover:text-blue-600 font-semibold underline"
+        {{on "click" (fn this.navigateToDetail blog._id)}}>
+        Read More
+      </a>
+    </div>
+    {{/each}}
+  </div>
+  <div class="flex justify-center mt-4 space-x-2">
+    <button
+      class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+      disabled={{eq this.currentPage 1}} type="button" {{on "click" this.handlePreviousPage}}>
+      Previous
+    </button>
+    <span class="px-4 py-2 text-gray-700">{{this.currentPage}} / {{this.totalPages}}</span>
+    <button
+      class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+      disabled={{eq this.currentPage this.totalPages}} type="button" {{on "click" this.handleNextPage}}>
+      Next
+    </button>
+  </div>
+  {{/if}}
+</div>
+{{else}}
+{{outlet}}
+{{/if}}

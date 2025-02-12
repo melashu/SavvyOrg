@@ -1,0 +1,40 @@
+<div class="flex flex-col h-screen">
+  <div class="flex items-center justify-between h-20 px-4">
+    <Logo />
+    <button class="md:hidden text-gray-200 hover:text-white focus:outline-none" type="button" {{on "click"
+      this.toggleSidebar}}>
+      <i class="fas fa-bars text-xl"></i>
+    </button>
+  </div>
+  <div class="flex-1 px-4 py-2 transition-transform duration-300 md:translate-x-0">
+    <nav>
+      <ul class="space-y-4">
+        {{#each this.menuItems as |menuItem|}}
+        <li>
+          <div class="flex items-center gap-3 px-4 py-2 text-sm font-medium rounded-md cursor-pointer hover:bg-gray-700"
+            {{on "click" (fn this.toggleSubMenu menuItem.title)}}>
+            <i class="fas {{menuItem.icon}}"></i>
+            {{menuItem.title}}
+            <i class="fas fa-chevron-down ml-auto"></i>
+          </div>
+          {{#if (eq this.activeMenu menuItem.title)}}
+          <ul class="pl-8 space-y-2">
+            {{#each menuItem.subItems as |subItem|}}
+            <li>
+              <a href={{subItem.link}} class="block text-sm text-gray-400 hover:text-white">
+                {{subItem.title}}
+              </a>
+            </li>
+            {{/each}}
+          </ul>
+          {{/if}}
+        </li>
+        {{/each}}
+      </ul>
+      <button class="w-full px-4 mt-8 py-2 text-sm font-medium text-center bg-red-600 rounded-md hover:bg-red-700"
+        type="button" {{on "click" this.logout}}>
+        Logout
+      </button>
+    </nav>
+  </div>
+</div>

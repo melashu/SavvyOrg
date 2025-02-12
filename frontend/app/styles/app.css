@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("flowbite");
+
+.logo {
+  @apply flex flex-row;
+}
+
+.heading {
+  @apply text-[1.875rem] font-bold flex gap-2;
+}
+
+.btn {
+  @apply px-6 py-2 rounded-lg font-medium text-sm transition-colors bg-[#021D4A] text-white hover:bg-yellow-400 focus:ring-4 focus:ring-yellow-400 dark:bg-yellow-400 dark:text-black dark:hover:bg-white dark:focus:ring-yellow-400;
+}
+
+.bgcolor {
+  @apply bg-gray-100 dark:bg-[#031A3E] text-black dark:text-white;
+}

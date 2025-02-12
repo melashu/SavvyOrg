@@ -1,0 +1,31 @@
+{{!-- app/templates/blogs/detail.hbs --}}
+<div class="min-h-screen flex flex-col bg-gray-50 text-gray-800">
+    <main class="flex-grow container bg-gray-100 text-black dark:bg-[#031A3E] dark:text-white mx-auto py-12 px-4">
+        {{#if this.loading}}
+        <div class="flex items-center justify-center h-screen">
+            <p class="text-lg font-semibold">Loading...</p>
+        </div>
+        {{else if this.error}}
+        <div class="flex items-center justify-center h-screen">
+            <p class="text-red-500 font-semibold">{{this.error}}</p>
+        </div>
+        {{else if this.blog}}
+        <div class="">
+            <h2 class="text-lg font-semibold text-blue-600 mb-2">{{this.blog.title}}</h2>
+            {{#if this.blog.image}}
+            <img src={{this.blogImage}} alt="blog image" class="" />
+            {{/if}}
+                            <div id="editor" class="border p-2 min-h-[200px] rounded bg-white dark:bg-[#0A2950]" {{did-insert
+                                this.initializeEditor}}></div>
+            <p class="text-xs text-gray-500 mb-4">
+                {{format-date this.blog.createdAt}}
+            </p>
+        </div>
+
+        {{else}}
+        <div class="flex items-center justify-center h-screen">
+            <p class="text-red-500 font-semibold">Blog post not found.</p>
+        </div>
+        {{/if}}
+    </main>
+</div>

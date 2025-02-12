@@ -1,0 +1,54 @@
+<header class="flex items-center justify-between p-4 shadow-md text-black dark:text-white bg-white dark:bg-[#0A2964]">
+    <div class="flex items-center space-x-4">
+        <h1 class="text-2xl font-bold">Dashboard</h1>
+    </div>
+
+    <div class="flex items-center space-x-4">
+
+        <!-- 🔔 Notification Bell with SVG -->
+        <div class="relative">
+            <button class="p-2 text-gray-800 hover:text-blue-500 dark:text-gray-300 hover:dark:text-blue-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14V10a6 6 0 10-12 0v4c0 .386-.146.735-.405 1.005L4 17h5m6 0a3 3 0 11-6 0" />
+                </svg>
+            </button>
+
+            {{#if this.messages.length}}
+            <span class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1">
+                {{this.messages.length}}
+            </span>
+            {{/if}}
+
+            <div class="absolute right-0 mt-2 w-72 bg-white dark:bg-gray-800 rounded-md shadow-lg">
+                {{#if this.messages.length}}
+                {{#each this.messages as |msg|}}
+                <a href="/admin/notification?id={{msg._id}}"
+                    class="block p-3 hover:bg-blue-500 hover:text-white dark:text-gray-300">
+                    <span class="font-medium">{{msg.name}}</span>
+                    <p class="text-sm">{{msg.message}}</p>
+                </a>
+                {{/each}}
+                {{else}}
+                <div class="p-3 text-sm text-gray-500 dark:text-gray-300">No new messages.</div>
+                {{/if}}
+            </div>
+        </div>
+
+        <!-- 🌙 Dark Mode Toggle with SVG Icons -->
+            <button type="button" class="rounded-full p-2 bg-gray-100 dark:bg-gray-700 focus:outline-none" {{on "click"
+                this.toggleDarkMode}} aria-label="Toggle Theme">
+                {{#if (eq this.theme "light")}}
+                <svg class="w-6 h-6" fill="black" viewBox="0 0 64 64">
+                    <path
+                        d="M63.4374046,38.4606323c-0.4258003-0.2060013-0.9384995-0.0848999-1.2276001,0.2910995c-1.2803001,1.6650009-2.9452972,3.2001991-4.9501991,4.5625c-11.6180992,7.8808022-27.544899,4.9248009-35.4971008-6.5956993c-7.8154011-11.3204002-4.9902-26.9736996,6.2968998-34.8936005c0.3799-0.2666,0.5263996-0.7588,0.3544998-1.1895001c-0.1728001-0.4316-0.625-0.6835-1.0771008-0.6181c-4.6474991,0.6953-9.2070999,2.4902-13.1875,5.1893997C6.9706059,10.0759325,2.1415057,17.427433,0.5526057,25.9079323c-1.582,8.4414024,0.2402,16.9932022,5.1308002,24.0791016c6.2872,9.1054993,16.4864006,14.0058975,26.8554993,14.0058975c6.3173981,0,12.6982994-1.819397,18.2939987-5.6161995c6.5800018-4.461998,11.2461014-11.1298981,13.1406021-18.7753983C64.0877075,39.142334,63.8631058,38.6657333,63.4374046,38.4606323z" />
+                </svg>
+                {{else}}
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                    class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 3v1.5M12 19.5V21M4.219 4.219l1.06 1.06M18.72 18.72l1.06 1.06M3 12h1.5M19.5 12H21M4.219 19.781l1.06-1.06M18.72 5.28l1.06-1.06M8.25 12a3.75 3.75 0 107.5 0 3.75 3.75 0 00-7.5 0z" />
+                </svg>
+                {{/if}}
+            </button>
+    </div>
+</header>
