@@ -15,7 +15,6 @@ const bodyParser = require("body-parser");
 
 const { notFound, errorHandler } = require("./middleware/errorMiddleware.js");
 const userRoutes = require("./routes/userRoutes.js");
-const setupPassport = require("./config/passportSetup.js");
 const contactRoutes = require("./routes/contactRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const blogRoutes = require("./routes/blogRoutes");
