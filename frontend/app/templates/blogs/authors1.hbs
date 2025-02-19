@@ -1,0 +1,81 @@
+{{!-- app/templates/blogs/authors.hbs --}}
+<div class="min-h-screen bgcolor">
+    <main class="w-full py-8">
+            {{#if this.model.loading}}
+                <div class="flex items-center justify-center h-screen">
+                    <p class="text-lg font-semibold">Loading...</p>
+                </div>
+                        {{else if this.model.errorMessage}}
+                        <div class="flex items-center justify-center h-screen">
+                            <p class="text-red-500 font-semibold">{{this.model.errorMessage}}</p>
+                        </div>
+            {{else}}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {{#each this.model.userData as |author|}}
+            <div class="card w-full shadow-lg rounded-xl transition-all hover:shadow-xl">
+                <div class="text-center p-6">
+                    <img src="{{if author.profilePicture author.profilePicture '/images/author_profile.png'}}"
+                        alt="{{author.name}}'s profile picture"
+                        class="w-24 h-24 rounded-full mx-auto border-4 border-gray-300 dark:border-gray-700" />
+                    <h5 class="text-2xl font-extrabold text-gray-900 dark:text-white mt-4">{{author.name}}</h5>
+                    <p class="text-lg font-medium text-gray-600 dark:text-gray-400 mt-1">{{author.role}}</p>
+                    <p class="text-gray-700 dark:text-gray-300 mt-3 leading-relaxed">{{author.bio}}</p>
+
+                    {{!-- <div class="mt-4">
+                        <LinkTo @route="author" @model={{author._id}}
+                            class="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
+                            View Articles
+                        </LinkTo>
+                    </div> --}}
+
+<div class="flex justify-center space-x-4 mt-6">
+    {{#if author.socialLinks.facebook}}
+    <a href="{{author.socialLinks.facebook}}"
+        class="flex justify-center items-center w-10 h-10 rounded-full bg-blue-700 text-white hover:bg-blue-600 transition-all">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path
+                                    d="M22 12A10 10 0 1 0 12 22V14.89h-2.3V12h2.3v-2.2c0-2.3 1.4-3.6 3.5-3.6 1 0 2.1.2 2.1.2v2.3h-1.2c-1.1 0-1.4.7-1.4 1.4V12h2.4l-.4 2.89H15v7.11A10 10 0 0 0 22 12Z">
+                                </path>
+                            </svg>
+    </a>
+    {{/if}}
+    {{#if author.socialLinks.twitter}}
+    <a href="{{author.socialLinks.twitter}}"
+        class="flex justify-center items-center w-10 h-10 rounded-full bg-blue-700 text-white hover:bg-blue-400 transition-all">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path
+                                    d="M23 3a10.9 10.9 0 0 1-3.14 1.53A4.48 4.48 0 0 0 22.4.24a9.14 9.14 0 0 1-2.88 1.1 4.52 4.52 0 0 0-7.69 4.13A12.94 12.94 0 0 1 1.64.89a4.51 4.51 0 0 0 1.4 6.03A4.41 4.41 0 0 1 .88 6.7v.06a4.51 4.51 0 0 0 3.62 4.42 4.5 4.5 0 0 1-2.05.08 4.51 4.51 0 0 0 4.21 3.13A9.06 9.06 0 0 1 0 19.54a12.8 12.8 0 0 0 6.94 2.04c8.32 0 12.87-6.88 12.87-12.87l-.01-.59A9.18 9.18 0 0 0 23 3Z">
+                                </path>
+                            </svg>
+    </a>
+    {{/if}}
+    {{#if author.socialLinks.linkedin}}
+    <a href="{{author.socialLinks.linkedin}}"
+        class="flex justify-center items-center w-10 h-10 rounded-full bg-blue-700 text-white hover:bg-blue-600 transition-all">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path
+                                    d="M20.45 20.45h-3.55v-5.44c0-1.3-.02-2.97-1.81-2.97-1.82 0-2.1 1.42-2.1 2.88v5.53h-3.54V9h3.4v1.56h.05a3.74 3.74 0 0 1 3.37-1.85c3.6 0 4.26 2.37 4.26 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12Zm1.78 13.02H3.55V9h3.57v11.45Z">
+                                </path>
+                            </svg>
+    </a>
+    {{/if}}
+</div>
+
+                </div>
+            </div>
+            {{/each}}
+        </div>
+{{/if}}
+        {{!-- <div class="flex justify-center mt-8 space-x-4">
+            <button {{on "click" (fn this.handlePageChange (dec this.page))}} disabled={{eq this.page 1}}
+                class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 disabled:bg-gray-300 transition-all">
+                Previous
+            </button>
+            <span class="text-lg font-semibold">Page {{this.page}} of {{this.totalPages}}</span>
+            <button {{on "click" (fn this.handlePageChange (inc this.page))}} disabled={{eq this.page this.totalPages}}
+                class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 disabled:bg-gray-300 transition-all">
+                Next
+            </button>
+        </div> --}}
+    </main>
+</div>

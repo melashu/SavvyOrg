@@ -15,13 +15,19 @@ export default class AuthorsPageRoute extends Route {
   @tracked page = 1;
   @tracked totalPages = 1;
   @tracked profilePicture = '';
+  @tracked isLoading: boolean = true;
+  @tracked errorMessage: string | null = null;
 
   async model() {
     await this.fetchUserData();
-    return { userData: this.userData, page: this.page, totalPages: this.totalPages };
+    return { userData: this.userData, page: this.page, totalPages: this.totalPages, isLoading: this.isLoading, errorMessage: this.errorMessage};
   }
 
   async fetchUserData() {
+    this.isLoading = true;
+    console.log("this.isLoading");
+    console.log(this.isLoading);
+    console.log("this.isLoading");
     const token = localStorage.getItem('accessToken');
     try {
       // Fetch data from the API
@@ -32,16 +38,12 @@ const response = await axios.get(`${BASE_URL}/api/users/authors?pageNumber=${thi
       ...user,
       profilePicture: user.profilePic ? `${BASE_URL}/${String(user.profilePic).replace(/\\/g, '/')}` : '',
     }));
-
-
-console.log("user data in the authors");
-console.log(this.userData);
-console.log("user data in the authors");
-
-
       this.totalPages = response.data.pages;
-    } catch (error) {
-      console.error('Error fetching user data:', error);
+    } catch (err) {
+      console.error('Error fetching blog:', err);
+      this.errorMessage = 'Failed to load blog post.';
+    } finally {
+      this.isLoading = false;
     }
   }
 
