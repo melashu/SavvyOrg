@@ -158,6 +158,33 @@ const getArticleById = async (req, res) => {
   }
 };
 
+const getArticleByTitle = async (req, res) => {
+  console.log("blog data by title");
+  console.log(req.query);
+  console.log("blog data by title");
+      const { title, authorId } = req.query;
+    let filter = {};
+
+      filter.title = title;
+
+      filter["authorId"] = authorId;
+
+  try {
+    // Query the database with lean and select
+    const blogPost = await Blog.findOne(filter)
+      .lean()
+      .select("title content author image createdAt");
+
+    if (!blogPost) {
+      return res.status(404).json({ message: "Article not found" });
+    }
+    res.json(blogPost);
+  } catch (error) {
+    console.error("Error fetching article:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 const updateBlogById = async (req, res) => {
   console.log("Body Data", req.body);
   const { title, authorId, content, status } = req.body;
@@ -205,6 +232,7 @@ module.exports = {
   getAllPublishedArticles,
   getBlogById,
   getArticleById,
+  getArticleByTitle,
   updateBlogById,
   deleteBlog,
 };

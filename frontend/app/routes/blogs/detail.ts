@@ -7,8 +7,8 @@ import { inject as service } from '@ember/service';
 export default class BlogsDetailRoute extends Route {
   @service router: any;
 
-  async model(params: { id: string }) {
-    return params.id;
+  async model(params: { title: string }) {
+    return params.title;
   }
 
     setupController(controller: any, model: string, transition: any) {

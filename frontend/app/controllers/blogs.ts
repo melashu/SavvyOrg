@@ -75,6 +75,12 @@ export default class BlogsController extends Controller {
     await this.fetchBlogs(this.currentPage, this.selectedAuthor);
   }
 
+    @action
+  async navigateToDetail(authorId: string) {
+
+    localStorage.setItem('authorIdForBlog', authorId);
+  }
+
   @action
   async handleNextPage() {
     console.log('blogs next page');

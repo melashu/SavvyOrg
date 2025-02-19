@@ -15,9 +15,8 @@
             {{#if this.blog.image}}
             <img src={{this.blogImage}} alt="blog image" class="" />
             {{/if}}
-            <p class="text-sm text-gray-700 mb-4">
-                {{{ sanitize-html this.blog.content }}}
-            </p>
+                            <div id="editor" class="border p-2 min-h-[200px] rounded bg-white dark:bg-[#0A2950]" {{did-insert
+                                this.initializeEditor}}></div>
             <p class="text-xs text-gray-500 mb-4">
                 {{format-date this.blog.createdAt}}
             </p>

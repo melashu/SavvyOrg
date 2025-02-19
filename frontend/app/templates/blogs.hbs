@@ -28,8 +28,8 @@
         {{format-date blog.createdAt}}
       </p>
       {{!-- Read More Link --}}
-      <a href="/blogs/detail/{{blog._id}}" class="text-blue-500 hover:text-blue-600 font-semibold underline"
-        {{on "click" (fn this.navigateToDetail blog._id)}}>
+      <a href="/blogs/detail/{{blog.title}}" class="text-blue-500 hover:text-blue-600 font-semibold underline"
+        {{on "click" (fn this.navigateToDetail blog.authorId._id)}}>
         Read More
       </a>
     </div>

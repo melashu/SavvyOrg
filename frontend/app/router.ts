@@ -16,7 +16,7 @@ Router.map(function () {
   this.route('home', { path: '/' });
   this.route('blogs', function() {
     this.route('authors');
-    this.route('detail', { path: '/detail/:id' });
+    this.route('detail', { path: '/detail/:title' });
   });
   this.route('login');
   this.route('register');

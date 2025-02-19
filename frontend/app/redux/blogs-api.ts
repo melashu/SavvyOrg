@@ -17,6 +17,9 @@ export const blogsApi = createApi({
     fetchBlogById: builder.query({
       query: (id) => `/api/blogs/articles/${id}`,
     }),
+    fetchBlogByTitle: builder.query({
+      query: ({ title, authorId }) => `/api/blogs/articles/detail/title?title=${title}&authorId=${authorId}`,
+    }),
     postBlog: builder.mutation({
       query: (formData) => ({
         url: 'api/blogs',

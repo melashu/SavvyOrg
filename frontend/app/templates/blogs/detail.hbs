@@ -13,7 +13,10 @@
         <div class="">
             <h2 class="text-lg font-semibold text-blue-600 mb-2">{{this.blog.title}}</h2>
             {{#if this.blog.image}}
-            <img src={{this.blogImage}} alt="blog image" class="" />
+            <div class="flex justify-center">
+               <img src={{this.blogImage}} alt="blog image" class="w-full max-w-2xl rounded-md" />
+            </div>
+
             {{/if}}
                             <div id="editor" class="border p-2 min-h-[200px] rounded bg-white dark:bg-[#0A2950]" {{did-insert
                                 this.initializeEditor}}></div>

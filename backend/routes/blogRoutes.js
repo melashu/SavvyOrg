@@ -5,6 +5,7 @@ const {
   getAllPublishedArticles,
   getBlogById,
   getArticleById,
+  getArticleByTitle,
   updateBlogById,
   deleteBlog,
 } = require("../controllers/blogController");
@@ -27,6 +28,9 @@ router.get("/:id", getBlogById);
 
 // Route to get articles by id
 router.get("/articles/:id", getArticleById);
+
+// Route to get articles by id
+router.get("/articles/detail/title", getArticleByTitle);
 
 // Route to update blog by id
 router.put("/:id", upload.single("image"), updateBlogById);
