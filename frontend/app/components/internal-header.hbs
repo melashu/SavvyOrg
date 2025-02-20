@@ -5,9 +5,9 @@
 
     <div class="flex items-center space-x-4">
 
-        <!-- 🔔 Notification Bell with SVG -->
+        {{!-- 🔔 Notification Bell with SVG --}}
         <div class="relative">
-            <button class="p-2 text-gray-800 hover:text-blue-500 dark:text-gray-300 hover:dark:text-blue-400">
+            <button class="p-2 text-gray-800 hover:text-blue-500 dark:text-gray-300 hover:dark:text-blue-400" type="button">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14V10a6 6 0 10-12 0v4c0 .386-.146.735-.405 1.005L4 17h5m6 0a3 3 0 11-6 0" />
                 </svg>
@@ -34,7 +34,7 @@
             </div>
         </div>
 
-        <!-- 🌙 Dark Mode Toggle with SVG Icons -->
+        {{!-- 🌙 Dark Mode Toggle with SVG Icons --}}
             <button type="button" class="rounded-full p-2 bg-gray-100 dark:bg-gray-700 focus:outline-none" {{on "click"
                 this.toggleDarkMode}} aria-label="Toggle Theme">
                 {{#if (eq this.theme "light")}}

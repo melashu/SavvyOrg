@@ -11,7 +11,7 @@ export default class HeaderComponent extends Component {
   }
 
   get showHeaderAndFooter(): boolean {
-    const excludedRoutes = ['login', 'register', 'dashboard', 'admin', 'author', 'customer', 'user'];
+    const excludedRoutes = ['login', 'register', 'dashboard', 'admin', 'author', 'customer', 'user', 'testimony.post'];
       return !excludedRoutes.some(route => this.router.currentRouteName.includes(route)) || 
            this.router.currentRouteName.includes('authors');
   }

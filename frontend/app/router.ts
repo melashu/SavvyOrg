@@ -78,4 +78,8 @@ Router.map(function () {
     });
   });
   this.route('unauthorized');
+
+  this.route('testimony', function() {
+    this.route('post');
+  });
 });

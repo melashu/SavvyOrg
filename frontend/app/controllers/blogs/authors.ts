@@ -18,16 +18,17 @@ export default class BlogsAuthorsController extends Controller {
     super();
     this.fetchUserData(); // Load data when the controller is instantiated
   }
-  
 
   async fetchUserData() {
     this.isLoading = true;
     const token = localStorage.getItem('accessToken');
     try {
-      const response = await axios.get(`${BASE_URL}/api/users/authors?pageNumber=${this.page}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
+      const response = await axios.get(
+        `${BASE_URL}/api/users/authors?pageNumber=${this.page}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
 
       console.log('authors response data');
       console.log(response.data);
@@ -35,7 +36,9 @@ export default class BlogsAuthorsController extends Controller {
 
       this.userData = response.data.users.map((user: any) => ({
         ...user,
-        profilePicture: user.profilePic ? `${BASE_URL}/${String(user.profilePic).replace(/\\/g, '/')}` : '',
+        profilePicture: user.profilePic
+          ? `${BASE_URL}/${String(user.profilePic).replace(/\\/g, '/')}`
+          : '',
       }));
       this.totalPages = response.data.pages;
       this.errorMessage = null;
