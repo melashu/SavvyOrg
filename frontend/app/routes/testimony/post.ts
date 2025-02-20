@@ -1,31 +1,27 @@
-/* eslint-disable prettier/prettier */
-// app/routes/testimony/post.ts
-import Route from "@ember/routing/route";
-import { tracked } from "@glimmer/tracking";
-import { action } from "@ember/object";
-
-interface Testimony {
-  name: string;
-  role: string;
-  image: string;
-  testimony: string;
-}
+import Route from '@ember/routing/route';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 
 export default class TestimonyPostRoute extends Route {
-  @tracked testimonies: Testimony[] = [];
+  @tracked name = '';
+  @tracked role = '';
+  @tracked testimony = '';
 
-  @tracked newTestimony: Testimony = {
-    name: "",
-    role: "",
-    image: "",
-    testimony: "",
-  };
+  // Define a type-safe update handler
+  @action
+  updateProperty(property: keyof this, event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    (this[property] as string) = value; // Safely update the property
+  }
 
   @action
-  addTestimony() {
-    if (this.newTestimony.name && this.newTestimony.role && this.newTestimony.testimony) {
-      this.testimonies = [...this.testimonies, { ...this.newTestimony, image: "/images/profile.jpg" }];
-      this.newTestimony = { name: "", role: "", image: "", testimony: "" };
-    }
+  createTestimonial(event: Event): void {
+    event.preventDefault();
+    console.log('Creating:', {
+      fullName: this.name,
+      email: this.role,
+      password: this.testimony,
+    });
+    // Add your testimony creation logic here
   }
 }

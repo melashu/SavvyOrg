@@ -10,6 +10,7 @@ import { forgetPasswordApi } from './user/password/forgot-password-api';
 import { resetApi } from './user/password/reset-api';
 import { userApi } from './user-api';
 import { messagesApi } from './messages-Api';
+import { testimonialApi } from './testimonial-api';
 
 
 export const store = configureStore({
@@ -24,9 +25,10 @@ export const store = configureStore({
     [resetApi.reducerPath]: resetApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
     [messagesApi.reducerPath]: messagesApi.reducer,
+    [testimonialApi.reducerPath]: testimonialApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(authApi.middleware).concat(userApi.middleware).concat(userManagementApi.middleware).concat(blogsApi.middleware).concat(userConfirmApi.middleware).concat(userProfileApi.middleware).concat(userManagementApi.middleware).concat(forgetPasswordApi.middleware).concat(resetApi.middleware).concat(messagesApi.middleware),
+    getDefaultMiddleware().concat(authApi.middleware).concat(userApi.middleware).concat(userManagementApi.middleware).concat(blogsApi.middleware).concat(userConfirmApi.middleware).concat(userProfileApi.middleware).concat(userManagementApi.middleware).concat(forgetPasswordApi.middleware).concat(resetApi.middleware).concat(messagesApi.middleware).concat(testimonialApi.middleware),
 });
 
 // Optional: Set up listeners for automatic cache management

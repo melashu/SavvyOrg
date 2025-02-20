@@ -18,6 +18,7 @@ const userRoutes = require("./routes/userRoutes.js");
 const contactRoutes = require("./routes/contactRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const blogRoutes = require("./routes/blogRoutes");
+const testimonyRoutes = require("./routes/testimonyRoutes");
 const Message = require("./models/messageModel");
 const frontendURL = require("./constant/url.js");
 
@@ -79,6 +80,7 @@ app.use("/contact", contactRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/uploads", express.static("uploads"));
 app.use("/api/blogs", blogRoutes);
+app.use("/api/testimonies", testimonyRoutes);
 
 // Health check route
 app.get("/", (req, res) => {
