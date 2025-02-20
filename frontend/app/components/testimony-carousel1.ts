@@ -1,58 +1,100 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable prefer-rest-params */
+/* eslint-disable prettier/prettier */
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import type { EmptyObject } from '@glimmer/component/-private/component';
 
-interface TestimonyData {
-  id: number;
-  name: string;
-  testimony: string;
-  role: string;
-  image: string;
-}
+export default class TestimonialCarouselComponent extends Component {
+    @tracked currentIndex = 0; // Track the current slide index
+    @tracked itemsPerSlide = 1; // Items per slide, changes based on screen size
 
-export default class TestimonyCarouselComponent extends Component {
-  @tracked testimonies: TestimonyData[] = [
-    { id: 1, name: 'John Doe', testimony: 'Amazing service!', role: 'CEO', image: '/images/profile.jpg' },
-    { id: 2, name: 'Jane Smith', testimony: 'Fantastic!', role: 'Manager', image: '/images/profile.jpg' },
-    { id: 3, name: 'Mike Johnson', testimony: 'Blown away!', role: 'Engineer', image: '/images/profile.jpg' },
-    { id: 4, name: 'Sara Williams', testimony: 'Top-notch!', role: 'HR', image: '/images/profile.jpg' },
-    { id: 5, name: 'Tom Lee', testimony: 'Highly recommend!', role: 'CTO', image: '/images/profile.jpg' },
-  ];
+    testimonies = [
+        {
+            name: "John Doe",
+            role: "Software Engineer",
+            image: "/images/profile.jpg",
+            testimony: "This is an amazing service!",
+        },
+        {
+            name: "Jane Smith",
+            role: "Product Manager",
+            image: "/images/profile.jpg",
+            testimony: "Highly recommended for everyone.",
+        },
+        {
+            name: "Mike Johnson",
+            role: "CEO",
+            image: "/images/profile.jpg",
+            testimony: "A game-changer for our business!",
+        },
+        {
+            name: "Abebe Kebede",
+            role: "Software Engineer",
+            image: "/images/profile.jpg",
+            testimony: "This is an amazing service!",
+        },
+        {
+            name: "Ermias Abebe",
+            role: "Product Manager",
+            image: "/images/profile.jpg",
+            testimony: "Highly recommended for everyone.",
+        },
+        {
+            name: "Temesgen Alemu",
+            role: "CEO",
+            image: "/images/profile.jpg",
+            testimony: "A game-changer for our business!",
+        },
+    ];
 
-  @tracked currentSlideIndex = 0;
-
-  // Dynamically calculate slides per view based on window width
-  get slidesPerView(): number {
-    if (typeof window !== 'undefined') {
-      return window.innerWidth >= 1024 ? 3 : window.innerWidth >= 768 ? 2 : 1;
+    constructor(owner: unknown, args: EmptyObject) {
+        super(owner, args); // Explicitly pass arguments
+        this.updateItemsPerSlide();
+        window.addEventListener('resize', this.updateItemsPerSlide.bind(this));
     }
-    return 1;
-  }
 
-  // Maximum slide index
-  get maxIndex(): number {
-    return Math.max(this.testimonies.length - this.slidesPerView, 0);
-  }
-
-  // Calculate the transform value for the slider
-get transformValue(): string {
-  return `${-(this.currentSlideIndex * (100 / this.slidesPerView))}%`;
-}
-
-  // Move to the next slide
-  @action
-  nextSlide(): void {
-    if (this.currentSlideIndex < this.maxIndex) {
-      this.currentSlideIndex++;
+    willDestroy() {
+        super.willDestroy(); // No arguments to pass explicitly here
+        window.removeEventListener('resize', this.updateItemsPerSlide.bind(this));
     }
-  }
 
-  // Move to the previous slide
-  @action
-  previousSlide(): void {
-    if (this.currentSlideIndex > 0) {
-      this.currentSlideIndex--;
+    @action
+    updateItemsPerSlide() {
+        const width = window.innerWidth;
+        if (width >= 1024) {
+            this.itemsPerSlide = 3; // Desktop: 3 items per slide
+        } else if (width >= 768) {
+            this.itemsPerSlide = 2; // Tablet: 2 items per slide
+        } else {
+            this.itemsPerSlide = 1; // Mobile: 1 item per slide
+        }
     }
-  }
+
+    get transformValue() {
+        return -(100 / this.itemsPerSlide) * this.currentIndex; // Calculate translateX value
+    }
+
+    get isPrevDisabled() {
+        return this.currentIndex === 0;
+    }
+
+    get isNextDisabled() {
+        return this.currentIndex >= Math.ceil(this.testimonies.length / this.itemsPerSlide) - 1;
+    }
+
+    @action
+    nextSlide() {
+        if (!this.isNextDisabled) {
+            this.currentIndex += 1;
+        }
+    }
+
+    @action
+    previousSlide() {
+        if (!this.isPrevDisabled) {
+            this.currentIndex -= 1;
+        }
+    }
 }

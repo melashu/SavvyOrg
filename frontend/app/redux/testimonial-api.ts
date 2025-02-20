@@ -8,6 +8,9 @@ export const testimonialApi = createApi({
   reducerPath: 'testimonialApi',
   baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
   endpoints: (builder) => ({
+    fetchTestimonials: builder.query({
+      query: () => '/api/testimonies',
+    }),
     createTestimony: builder.mutation({
       query: ({ name, role, testimony }: { name: string; role: string; testimony: string }) => ({
         url: 'api/testimonies', // Endpoint URL
