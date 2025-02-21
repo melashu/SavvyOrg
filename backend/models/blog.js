@@ -6,6 +6,7 @@ const blogSchema = new mongoose.Schema({
   content: { type: String, required: true },
   status: { type: String, required: true },
   image: { type: String },
+  comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
   createdAt: { type: Date, default: Date.now },
 });
 

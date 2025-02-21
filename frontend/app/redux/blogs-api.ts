@@ -27,6 +27,17 @@ export const blogsApi = createApi({
         body: formData, // Correctly passing FormData directly
       }),
     }),
+    postComment: builder.mutation({
+     query: ({ blogId, comment }) => ({
+      url: `api/blogs/detail/comment`,
+      method: 'POST',
+      body: { blogId, comment }, // Ensure correct data format
+       headers: {
+      'Content-Type': 'application/json', // Ensures JSON format is sent
+    },
+  }),
+}),
+
     updateBlog: builder.mutation({
       query: ({ id, data }) => ({
         url: `api/blogs/${id}`,

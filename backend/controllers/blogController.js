@@ -162,22 +162,29 @@ const getArticleByTitle = async (req, res) => {
   console.log("blog data by title");
   console.log(req.query);
   console.log("blog data by title");
-      const { title, authorId } = req.query;
-    let filter = {};
+  const { title, authorId } = req.query;
+  let filter = {};
 
-      filter.title = title;
+  filter.title = title;
 
-      filter["authorId"] = authorId;
+  filter["authorId"] = authorId;
 
   try {
     // Query the database with lean and select
     const blogPost = await Blog.findOne(filter)
       .lean()
-      .select("title content author image createdAt");
+      .populate({
+        path: "comments",
+        select: "fullName email comment  createdAt",
+      })
+      .select("title content author image comments createdAt");
 
     if (!blogPost) {
       return res.status(404).json({ message: "Article not found" });
     }
+
+    console.log(blogPost);
+
     res.json(blogPost);
   } catch (error) {
     console.error("Error fetching article:", error);

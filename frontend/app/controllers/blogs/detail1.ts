@@ -40,11 +40,14 @@ export default class BlogsDetailController extends Controller {
   }
 
   @action
-  async fetchBlog(id: string) {
+  async fetchBlog(title: string) {
     this.loading = true;
 try{
+
+  const authorId = localStorage.getItem('authorIdForBlog');
+
     const response = await this.reduxStore.store.dispatch(
-               blogsApi.endpoints.fetchBlogById.initiate(id)
+               blogsApi.endpoints.fetchBlogByTitle.initiate({ title: title, authorId: authorId })
              );
         this.blog = response.data;
 
@@ -53,7 +56,7 @@ try{
       if (this.quill) {
        this.quill.root.innerHTML = this.content;
       }
-        this.blogImage =`${BASE_URL}/${String(this.blog?.image).replace(/\\/g, '/')}`
+      this.blogImage = `${BASE_URL}/${String(this.blog?.image).replace(/\\/g, '/')}`;
     } catch (err) {
       console.error('Error fetching blog:', err);
       this.error = 'Failed to load blog post.';
@@ -87,4 +90,4 @@ initializeEditor(element: HTMLElement) {
     }
   }
 }
-}
+} 

@@ -10,12 +10,15 @@ const {
   deleteBlog,
 } = require("../controllers/blogController");
 
+const { postComment } = require("../controllers/commentController");
+
 const { upload } = require("../middleware/imageUpload.js");
 
 const router = express.Router();
 
 // Route to create a blog post
 router.post("/", upload.single("image"), createBlog);
+router.post("/detail/comment", postComment);
 
 // Route to get all blog posts
 router.get("/", getAllBlogs);
