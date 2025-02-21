@@ -67,11 +67,23 @@ export default class TestimonialCarouselComponent extends Component {
     get isNextDisabled() {
         let maxIndex = 0
       // Calculate the maximum index based on the number of items per slide
-      if(this.testimonies.length >=1 && this.testimonies.length <=3){
-        maxIndex = 1;
-      }else{
-        maxIndex = (this.testimonies.length) - 2;
-      }
+      const width = window.innerWidth;
+
+      if (width >= 1024) {
+            if(this.testimonies.length >=1 && this.testimonies.length <=3){
+            maxIndex = 1;
+            }else{
+              maxIndex = (this.testimonies.length) - 2;
+            }
+        } else if (width >= 768) {
+            if(this.testimonies.length >=1 && this.testimonies.length <=2){
+            maxIndex = 1;
+            }else{
+              maxIndex = (this.testimonies.length) - 1;
+            }
+        } else {
+            maxIndex = (this.testimonies.length) - 1;
+        }
     return this.currentIndex >= maxIndex;
 }
 
