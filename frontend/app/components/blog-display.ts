@@ -7,6 +7,8 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { blogsApi } from '../redux/blogs-api';
 import ReduxStoreService from 'frontend/services/redux-store';
+import toastr from 'toastr';
+import Swal from 'sweetalert2';
 
 interface Blog {
   _id: string;
@@ -60,7 +62,17 @@ export default class BlogDisplay extends Component {
         console.log("blogs data");
 
 
-        this.blogs = data.blogs;
+        this.blogs = data.blogs.map((blog: any) => ({
+        _id: blog._id,
+        title: blog.title,
+        description: blog.description,
+        urlTitle: blog.title.trim().replace(/\s+/g, '-'),
+        authorId: blog.authorId,
+        content: blog.content,
+        status: blog.status,
+        totalPublished: blog.totalPublished,
+        createdAt: blog.createdAt,
+      }));
         this.totalPages = data.totalPages;
     } catch (error) {
       this.error = 'Could not load blogs.';
@@ -76,14 +88,30 @@ export default class BlogDisplay extends Component {
 
   @action
   async deleteBlog(id: string) {
-    try { 
-      await this.reduxStore.store.dispatch(
-      blogsApi.endpoints.deleteBlog.initiate(id)
-    );
-        this.blogs = this.blogs.filter((blog) => blog._id !== id);
-    } catch (error) {
-      this.error = 'Could not delete the blog.';
-    }
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You won\'t be able to revert this!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then(async (result: { isConfirmed: any; }) => {
+      if (result.isConfirmed) {
+        try {
+          await this.reduxStore.store.dispatch(
+            blogsApi.endpoints.deleteBlog.initiate(id)
+          );
+          this.blogs = this.blogs.filter((blog) => blog._id !== id);
+          toastr.success('Blog deleted successfully');
+          Swal.fire('Deleted!', 'Your blog has been deleted.', 'success');
+        } catch (error) {
+          this.error = 'Could not delete the blog.';
+          toastr.error('Failed to delete blog');
+          Swal.fire('Error!', 'Failed to delete the blog.', 'error');
+        }
+      }
+    });
   }
 
   @action

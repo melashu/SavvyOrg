@@ -144,7 +144,7 @@ const getBlogById = async (req, res) => {
     // Retrieve only the necessary fields with lean() for better performance
     const blogPost = await Blog.findById(req.params.id)
       .lean()
-      .select("title content author createdAt");
+      .select("title description content author createdAt");
 
     if (!blogPost) {
       return res.status(404).json({ message: "Blog post not found" });
@@ -177,7 +177,7 @@ const getArticleById = async (req, res) => {
     // Query the database with lean and select
     const blogPost = await Blog.findById(articleId)
       .lean()
-      .select("title content author image createdAt");
+      .select("title description content author image createdAt");
 
     if (!blogPost) {
       return res.status(404).json({ message: "Article not found" });

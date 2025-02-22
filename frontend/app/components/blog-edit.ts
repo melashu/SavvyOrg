@@ -49,6 +49,12 @@ export default class BlogEditComponent extends Component {
         blogsApi.endpoints.fetchBlogById.initiate(this.blogId)
       );
       const blog = response.data;
+
+
+      console.log("blog by id in blog edit page");
+      console.log(blog);
+      console.log("blog by id in blog edit page");
+      
       if (blog) {
         this.title = blog.title;
         this.description = blog.description;
@@ -129,6 +135,7 @@ initializeEditor(element: HTMLElement) {
       );
       if (response.data.message === 'blog_updated') {
         toastr.success('Blog Updated Successfully');
+        window.location.href = `view?status=${this.status}`;
       }
     } catch (error) {
       console.error('Error updating blog:', error);

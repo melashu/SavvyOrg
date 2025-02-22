@@ -50,6 +50,11 @@ export default class BlogsDetailController extends Controller {
 
   @action
   async fetchBlog(title: string) {
+
+console.log("title");
+console.log(title);
+console.log("title");
+
     this.loading = true;
     try {
       const authorId = localStorage.getItem('authorIdForBlog');

@@ -111,6 +111,10 @@ async fetchUserData() {
       const message = response.data.message;
       if(message == 'blog_created'){
         toastr.success('Blog Created Successfully');
+         // Clear input fields after successful submission
+         const status = this.status;
+        this.resetForm();
+        window.location.href = `view?status=${status}`;
       }
     } catch (error) {
       console.error('Error posting blog:', error);

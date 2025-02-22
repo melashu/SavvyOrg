@@ -36,7 +36,7 @@
                         <td class="py-3 px-6 font-medium text-gray-900">{{blog.title}}</td>
                         <td class="py-3 px-6">{{blog.authorId.name}}</td>
                         <td class="py-3 px-6"><p>{{{truncate-words (sanitize-html blog.content) 5}}}</p>
-                             <a href="/blogs/detail/{{blog._id}}"
+                             <a href="/blogs/detail/{{blog.urlTitle}}"
                             class="text-blue-600 hover:text-blue-800 hover:underline font-semibold transition-colors duration-300">
                             View Full Article
                         </a></td>
