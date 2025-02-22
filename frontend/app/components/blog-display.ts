@@ -87,6 +87,12 @@ export default class BlogDisplay extends Component {
 }
 
   @action
+  async navigateToDetail(authorId: string) {
+
+    localStorage.setItem('authorIdForBlog', authorId);
+  }
+
+  @action
   async deleteBlog(id: string) {
     Swal.fire({
       title: 'Are you sure?',

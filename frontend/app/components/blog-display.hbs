@@ -37,7 +37,8 @@
                         <td class="py-3 px-6">{{blog.authorId.name}}</td>
                         <td class="py-3 px-6"><p>{{{truncate-words (sanitize-html blog.content) 5}}}</p>
                              <a href="/blogs/detail/{{blog.urlTitle}}"
-                            class="text-blue-600 hover:text-blue-800 hover:underline font-semibold transition-colors duration-300">
+                            class="text-blue-600 hover:text-blue-800 hover:underline font-semibold transition-colors duration-300" 
+                            {{on "click" (fn this.navigateToDetail blog.authorId._id)}}></a>
                             View Full Article
                         </a></td>
                         <td class="py-3 px-6">
