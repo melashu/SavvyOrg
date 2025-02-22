@@ -70,32 +70,62 @@ const getAllPublishedArticles = async (req, res) => {
     const filter = { status: "published" };
     if (authorId) filter.authorId = authorId;
 
-    // Use selective fields to limit returned data and `lean()` for performance
+    // Fetch paginated blogs
     const blogQuery = Blog.find(filter)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
-      .select("title content createdAt") // Only select necessary fields
+      .select("title content createdAt authorId")
       .populate("authorId", "name")
       .lean();
 
-    // Conditional countDocuments execution only if it's the first page
+    // Count total blogs (only if on first page)
     const totalBlogsPromise =
       page === 1 ? Blog.countDocuments(filter) : Promise.resolve(null);
 
-    // Run both queries in parallel
-    const [blogs, totalBlogs] = await Promise.all([
+    // Aggregate total published blogs by each author
+    const totalPublishedByAuthorPromise = Blog.aggregate([
+      { $match: { status: "published" } },
+      { $group: { _id: "$authorId", totalPublished: { $sum: 1 } } },
+      {
+        $lookup: {
+          from: "users",
+          localField: "_id",
+          foreignField: "_id",
+          as: "author",
+        },
+      },
+      { $unwind: "$author" },
+      { $project: { authorName: "$author.name", totalPublished: 1 } },
+    ]);
+
+    // Run queries in parallel
+    const [blogs, totalBlogs, totalPublishedByAuthor] = await Promise.all([
       blogQuery,
       totalBlogsPromise,
+      totalPublishedByAuthorPromise,
     ]);
+
+    // Create a map for quick lookup of totalPublished by authorId
+    const totalPublishedMap = totalPublishedByAuthor.reduce((acc, item) => {
+      acc[item._id.toString()] = item.totalPublished;
+      return acc;
+    }, {});
+
+    // Add totalPublished to each blog entry based on authorId
+    const blogsWithTotalPublished = blogs.map((blog) => ({
+      ...blog,
+      totalPublished: totalPublishedMap[blog.authorId._id.toString()] || 0,
+    }));
 
     const totalPages = totalBlogs ? Math.ceil(totalBlogs / limit) : undefined;
 
     res.status(200).json({
-      blogs,
+      blogs: blogsWithTotalPublished,
       currentPage: page,
       totalPages,
       totalBlogs,
+      totalPublishedByAuthor,
     });
   } catch (error) {
     res.status(500).json({ error: "Error fetching blogs" });

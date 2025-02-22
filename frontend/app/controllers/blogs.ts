@@ -58,6 +58,7 @@ export default class BlogsController extends Controller {
         authorId: blog.authorId,
         content: blog.content,
         status: blog.status,
+        totalPublished: blog.totalPublished,
         createdAt: blog.createdAt,
       }));
     } catch (err) {

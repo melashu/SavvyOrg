@@ -13,7 +13,7 @@ const createBlog = async (req, res) => {
     const newBlog = new Blog({ title, authorId, content, status, image });
     await newBlog.save();
 
-    res.json({ message: "Blog post created", blog: newBlog });
+    res.json({ message: "blog_created", blog: newBlog });
   } catch (error) {
     console.error("Error creating blog post:", error);
     res.status(500).json({ error: "Error creating blog post" });
@@ -21,18 +21,32 @@ const createBlog = async (req, res) => {
 };
 
 // getAllBlogs with Pagination
+
 const getAllBlogs = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1; // Current page number
     const limit = parseInt(req.query.limit) || 10; // Number of blogs per page
     const skip = (page - 1) * limit;
 
-    const totalBlogs = await Blog.countDocuments(); // Get the total count of blogs
-    const blogs = await Blog.find()
+    const { status, authorId, role } = req.query;
+    let filter = {};
+    if (status) {
+      filter.status = status;
+    }
+    if (role === "author" && authorId) {
+      filter["authorId"] = authorId;
+    }
+
+    const totalBlogs = await Blog.countDocuments(filter); // Get the filtered count of blogs
+    const blogs = await Blog.find(filter)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
-      .populate("authorId", "name");
+      .populate({
+        path: "authorId",
+        select: "_id name",
+      })
+      .lean();
 
     res.status(200).json({
       blogs,
@@ -144,10 +158,48 @@ const getArticleById = async (req, res) => {
   }
 };
 
+const getArticleByTitle = async (req, res) => {
+  console.log("blog data by title");
+  console.log(req.query);
+  console.log("blog data by title");
+  const { title, authorId } = req.query;
+  let filter = {};
+
+  filter.title = title;
+
+  filter["authorId"] = authorId;
+
+  try {
+    // Query the database with lean and select
+    const blogPost = await Blog.findOne(filter)
+      .lean()
+      .populate({
+        path: "comments",
+        select: "fullName email comment  createdAt",
+      })
+      .select("title content author image comments createdAt");
+
+    if (!blogPost) {
+      return res.status(404).json({ message: "Article not found" });
+    }
+
+    console.log(blogPost);
+
+    res.json(blogPost);
+  } catch (error) {
+    console.error("Error fetching article:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 const updateBlogById = async (req, res) => {
   console.log("Body Data", req.body);
   const { title, authorId, content, status } = req.body;
-  const image = req.file ? req.file.path : null; // Handle image upload
+  // Ensure the image field is correctly accessed from req.files
+  let image = "";
+  if (req.file) {
+    image = req.file.path;
+  }
   try {
     const updatedBlog = await Blog.findByIdAndUpdate(
       req.params.id,
@@ -158,7 +210,7 @@ const updateBlogById = async (req, res) => {
     if (!updatedBlog)
       return res.status(404).json({ message: "Blog post not found." });
 
-    res.json({ message: "Blog post updated successfully!", blog: updatedBlog });
+    res.json({ message: "blog_updated", blog: updatedBlog });
   } catch (error) {
     res.status(500).json({ message: "Error updating the blog post.", error });
   }
@@ -187,6 +239,7 @@ module.exports = {
   getAllPublishedArticles,
   getBlogById,
   getArticleById,
+  getArticleByTitle,
   updateBlogById,
   deleteBlog,
 };
