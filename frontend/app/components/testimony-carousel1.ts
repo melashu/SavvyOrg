@@ -57,7 +57,7 @@ export default class TestimonialCarouselComponent extends Component {
     }
 
     get transformValue() {
-        return -(100 / this.itemsPerSlide) * this.currentIndex;
+    return `translateX(-${this.currentIndex * (100 / this.itemsPerSlide)}%)`;
     }
 
     get isPrevDisabled() {
@@ -65,8 +65,28 @@ export default class TestimonialCarouselComponent extends Component {
     }
 
     get isNextDisabled() {
-        return this.currentIndex >= Math.ceil((this.testimonies.length || 0) / this.itemsPerSlide) - 1;
-    }
+        let maxIndex = 0
+      // Calculate the maximum index based on the number of items per slide
+      const width = window.innerWidth;
+
+      if (width >= 1024) {
+            if(this.testimonies.length >=1 && this.testimonies.length <=3){
+            maxIndex = 1;
+            }else{
+              maxIndex = (this.testimonies.length) - 2;
+            }
+        } else if (width >= 768) {
+            if(this.testimonies.length >=1 && this.testimonies.length <=2){
+            maxIndex = 1;
+            }else{
+              maxIndex = (this.testimonies.length) - 1;
+            }
+        } else {
+            maxIndex = (this.testimonies.length) - 1;
+        }
+    return this.currentIndex >= maxIndex;
+}
+
 
     @action
     nextSlide() {

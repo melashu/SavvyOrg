@@ -15,6 +15,7 @@ export default class TestimonialCarouselComponent extends Component {
     @tracked currentIndex = 0;
     @tracked itemsPerSlide = 1;
     @tracked testimonies: any[] = [];
+    @tracked isLoading = true;
 
     constructor(owner: unknown, args: EmptyObject) {
         super(owner, args);
@@ -29,18 +30,16 @@ export default class TestimonialCarouselComponent extends Component {
     }
 
     async loadTestimonials() {
+        this.isLoading = true;
         try {
             const response = await this.reduxStore.store.dispatch(
                 testimonialApi.endpoints.fetchTestimonials.initiate(undefined)
             );
-
-            console.log("testimonials data from Api");
-            console.log(response.data);
-            console.log("testimonials data from Api");
-
             this.testimonies = response.data.testimonies || [];
         } catch (error) {
             console.error('Error fetching testimonials:', error);
+        } finally {
+            this.isLoading = false;
         }
     }
 
@@ -57,7 +56,7 @@ export default class TestimonialCarouselComponent extends Component {
     }
 
     get transformValue() {
-    return `translateX(-${this.currentIndex * (100 / this.itemsPerSlide)}%)`;
+        return `translateX(-${this.currentIndex * (100 / this.itemsPerSlide)}%)`;
     }
 
     get isPrevDisabled() {
@@ -65,28 +64,18 @@ export default class TestimonialCarouselComponent extends Component {
     }
 
     get isNextDisabled() {
-        let maxIndex = 0
-      // Calculate the maximum index based on the number of items per slide
-      const width = window.innerWidth;
+        let maxIndex = 0;
+        const width = window.innerWidth;
 
-      if (width >= 1024) {
-            if(this.testimonies.length >=1 && this.testimonies.length <=3){
-            maxIndex = 1;
-            }else{
-              maxIndex = (this.testimonies.length) - 2;
-            }
+        if (width >= 1024) {
+            maxIndex = this.testimonies.length > 3 ? this.testimonies.length - 2 : 1;
         } else if (width >= 768) {
-            if(this.testimonies.length >=1 && this.testimonies.length <=2){
-            maxIndex = 1;
-            }else{
-              maxIndex = (this.testimonies.length) - 1;
-            }
+            maxIndex = this.testimonies.length > 2 ? this.testimonies.length - 1 : 1;
         } else {
-            maxIndex = (this.testimonies.length) - 1;
+            maxIndex = this.testimonies.length - 1;
         }
-    return this.currentIndex >= maxIndex;
-}
-
+        return this.currentIndex >= maxIndex;
+    }
 
     @action
     nextSlide() {
