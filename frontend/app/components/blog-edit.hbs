@@ -11,6 +11,11 @@
 
             </div>
             <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-white">Short Summary</label>
+                <input type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" value={{this.description}}
+                    {{on "input" this.updateDescription}} required />
+            </div>
+            <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-white">Content</label>
                 <div id="editor" class="border p-2 min-h-[200px] rounded bg-white dark:bg-[#0A2950]" {{did-insert
                     this.initializeEditor}}></div>

@@ -3,14 +3,21 @@ const Blog = require("../models/blog");
 // Create a new blog post
 const createBlog = async (req, res) => {
   try {
-    const { title, authorId, content, status } = req.body;
+    const { title, description, authorId, content, status } = req.body;
     // Ensure the image field is correctly accessed from req.files
     let image = "";
     if (req.file) {
       image = req.file.path;
     }
 
-    const newBlog = new Blog({ title, authorId, content, status, image });
+    const newBlog = new Blog({
+      title,
+      description,
+      authorId,
+      content,
+      status,
+      image,
+    });
     await newBlog.save();
 
     res.json({ message: "blog_created", blog: newBlog });
@@ -75,7 +82,7 @@ const getAllPublishedArticles = async (req, res) => {
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
-      .select("title content createdAt authorId")
+      .select("title description content createdAt authorId")
       .populate("authorId", "name")
       .lean();
 
@@ -224,7 +231,7 @@ const getArticleByTitle = async (req, res) => {
 
 const updateBlogById = async (req, res) => {
   console.log("Body Data", req.body);
-  const { title, authorId, content, status } = req.body;
+  const { title, description, authorId, content, status } = req.body;
   // Ensure the image field is correctly accessed from req.files
   let image = "";
   if (req.file) {
@@ -233,7 +240,14 @@ const updateBlogById = async (req, res) => {
   try {
     const updatedBlog = await Blog.findByIdAndUpdate(
       req.params.id,
-      { title, authorId, content, status, ...(image && { image }) },
+      {
+        title,
+        description,
+        authorId,
+        content,
+        status,
+        ...(image && { image }),
+      },
       { new: true }
     );
 

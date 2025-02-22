@@ -18,6 +18,7 @@ type FileEventTarget = EventTarget & { files: FileList | null };
 export default class BlogPostComponent extends Component {
   @service reduxStore!: ReduxStoreService; // Inject Redux Store service
   @tracked title = '';
+  @tracked description = '';
   @tracked authorId = '';
   @tracked content = '';
   @tracked status = 'draft';
@@ -76,9 +77,6 @@ async fetchUserData() {
   }
 }
 
-
-
-
   @action
   handleFileChange(event: Event) {
     const target = event.target as FileEventTarget;
@@ -91,7 +89,7 @@ async fetchUserData() {
   async handleSubmit(event: Event) {
     event.preventDefault();
 
-    if (!this.title || !this.content || !this.status) {
+    if (!this.title || !this.description || !this.content || !this.status) {
       this.message = 'Please fill all required fields.';
       return;
     }
@@ -99,7 +97,8 @@ async fetchUserData() {
     // this.authorId = localStorage.getItem('userId') as string;
 
     const formData = new FormData();
-    formData.append('title', this.title);
+    formData.append('title', this.title.trim());
+    formData.append('description', this.description);
     formData.append('authorId', this.authorId);
     formData.append('content', this.content);
     formData.append('status', this.status);
@@ -121,6 +120,7 @@ async fetchUserData() {
 
   resetForm() {
     this.title = '';
+    this.description = '';
     this.content = '';
     this.image = null;
     this.status = 'draft';
@@ -131,6 +131,12 @@ async fetchUserData() {
 updateTitle(event: InputEvent) {
   const target = event.target as HTMLInputElement;
   this.title = target.value;
+}
+
+  @action
+updateDescription(event: InputEvent) {
+  const target = event.target as HTMLInputElement;
+  this.description = target.value;
 }
 
 @action

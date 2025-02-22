@@ -43,7 +43,8 @@ export default class BlogsDetailController extends Controller {
 
   set model(value: string) {
     if (value) {
-      this.fetchBlog(value);
+      const title = value.replace(/-/g, ' ');
+      this.fetchBlog(title);
     }
   }
 

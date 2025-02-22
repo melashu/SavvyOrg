@@ -55,6 +55,8 @@ export default class BlogsController extends Controller {
       this.blogs = data.blogs.map((blog: any) => ({
         _id: blog._id,
         title: blog.title,
+        description: blog.description,
+        urlTitle: blog.title.trim().replace(/\s+/g, '-'),
         authorId: blog.authorId,
         content: blog.content,
         status: blog.status,

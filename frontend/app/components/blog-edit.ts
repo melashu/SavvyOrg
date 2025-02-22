@@ -16,6 +16,7 @@ type FileEventTarget = EventTarget & { files: FileList | null };
 export default class BlogEditComponent extends Component {
   @service reduxStore!: ReduxStoreService;
   @tracked title = '';
+  @tracked description = '';
   @tracked authorId = '';
   @tracked content = '';
   @tracked status = 'draft';
@@ -50,6 +51,7 @@ export default class BlogEditComponent extends Component {
       const blog = response.data;
       if (blog) {
         this.title = blog.title;
+        this.description = blog.description;
         this.authorId = blog.authorId;
         this.content = blog.content;
         this.status = blog.status;
@@ -109,13 +111,14 @@ initializeEditor(element: HTMLElement) {
   @action
   async handleSubmit(event: Event) {
     event.preventDefault();
-    if (!this.title || !this.content || !this.status) {
+    if (!this.title || !this.description || !this.content || !this.status) {
       this.message = 'Please fill all required fields.';
       return;
     }
 
     const formData = new FormData();
     formData.append('title', this.title);
+    formData.append('description', this.description);
     formData.append('content', this.content);
     formData.append('status', this.status);
     if (this.image) formData.append('image', this.image);
@@ -137,6 +140,12 @@ initializeEditor(element: HTMLElement) {
   updateTitle(event: InputEvent) {
     const target = event.target as HTMLInputElement;
     this.title = target.value;
+  }
+
+  @action
+  updateDescription(event: InputEvent) {
+    const target = event.target as HTMLInputElement;
+    this.description = target.value;
   }
 
   @action
