@@ -5,7 +5,7 @@ const Testimony = require("../models/testimony.js");
 // @route POST /api/testimonies/
 // @access PUBLIC
 const createTestimony = asyncHandler(async (req, res) => {
-  const { name, role, testimony } = req.body;
+  const { name, company, role, testimony } = req.body;
 
   console.log("testimony controller");
   console.log(req.body);
@@ -14,6 +14,7 @@ const createTestimony = asyncHandler(async (req, res) => {
   try {
     const testimonial = await Testimony.create({
       name,
+      company,
       role,
       testimony,
     });
@@ -28,6 +29,7 @@ const createTestimony = asyncHandler(async (req, res) => {
         testimony: {
           id: testimonial._id,
           name: testimonial.name,
+          company: testimonial.company,
           testimony: testimonial.testimony,
         },
       });
@@ -51,6 +53,7 @@ const getAllTestimonies = asyncHandler(async (req, res) => {
         testimonies: testimonies.map((testimony) => ({
           id: testimony._id,
           name: testimony.name,
+          company: testimony.company,
           role: testimony.role,
           testimony: testimony.testimony,
           image: "/images/profile.jpg",

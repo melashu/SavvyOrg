@@ -12,11 +12,11 @@ export const testimonialApi = createApi({
       query: () => '/api/testimonies',
     }),
     createTestimony: builder.mutation({
-      query: ({ name, role, testimony }: { name: string; role: string; testimony: string }) => ({
+      query: ({ name, company, role, testimony }: { name: string; company: string, role: string; testimony: string }) => ({
         url: 'api/testimonies', // Endpoint URL
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: { name, role, testimony },
+        body: { name, company, role, testimony },
       }),
     }),
   }),

@@ -15,20 +15,26 @@ export default class TestimonyPostController extends Controller {
   async createTestimonial(event: Event) {
     event.preventDefault();
     // Fetch form inputs
-    const name = (document.getElementById('name') as HTMLInputElement).value;
-    const role = (document.getElementById('role') as HTMLInputElement).value;
-    const testimony = (document.getElementById('testimony') as HTMLInputElement).value;
+    const nameInput = document.getElementById('name') as HTMLInputElement;
+    const companyInput = document.getElementById('company') as HTMLInputElement;
+    const roleInput = document.getElementById('role') as HTMLInputElement;
+    const testimonyInput = document.getElementById('testimony') as HTMLInputElement;
 
+    const name = nameInput.value;
+    const company = companyInput.value;
+    const role = roleInput.value;
+    const testimony = testimonyInput.value;
 
     // Validate inputs
-    if (!name || !role || !testimony) {
-      toastr.warning('Please fill in all fields: name, email, and password!', 'Warning');
+    if (!name || !company || !role || !testimony) {
+      toastr.warning('Please fill in all fields: name, company, role, and testimony!', 'Warning');
       return;
     }
+
     try {
-      // Dispatch the register mutation using Redux store
+      // Dispatch the createTestimony mutation using Redux store
       const response = await this.reduxStore.store.dispatch(
-        testimonialApi.endpoints.createTestimony.initiate({ name, role, testimony })
+        testimonialApi.endpoints.createTestimony.initiate({ name, company, role, testimony })
       );
 
       const testimonyData = response.data;
@@ -36,6 +42,12 @@ export default class TestimonyPostController extends Controller {
       // Handle success
       if (testimonyData.message === 'Testimony created successfully') {
         toastr.success('Testimony created successfully');
+
+        // Clear input fields after success
+        nameInput.value = '';
+        companyInput.value = '';
+        roleInput.value = '';
+        testimonyInput.value = '';
       } else {
         toastr.error('Testimony creation failed. Please check your details.', 'Error');
         console.error('Testimony creation error:', response.error);
@@ -46,4 +58,3 @@ export default class TestimonyPostController extends Controller {
     }
   }
 }
-
