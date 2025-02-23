@@ -10,7 +10,7 @@ const {
   deleteBlog,
 } = require("../controllers/blogController");
 
-const { postComment } = require("../controllers/commentController");
+const { postComment, getCommentsByBlogId } = require("../controllers/commentController");
 
 const { upload } = require("../middleware/imageUpload.js");
 
@@ -34,6 +34,8 @@ router.get("/articles/:id", getArticleById);
 
 // Route to get articles by id
 router.get("/articles/detail/title", getArticleByTitle);
+
+router.get("/detail/comments/:blog_id", getCommentsByBlogId);
 
 // Route to update blog by id
 router.put("/:id", upload.single("image"), updateBlogById);

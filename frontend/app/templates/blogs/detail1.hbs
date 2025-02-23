@@ -71,7 +71,7 @@
                         class="p-4 border rounded-lg shadow-md bg-gray-100 dark:bg-[#0A2950] flex flex-col sm:flex-row items-start sm:items-center">
                         <div
                             class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
-                            {{comment.author.[0]}}
+                            {{get comment.author "0"}}
                         </div>
                         <div class="sm:ml-4 w-full">
                             <p class="text-gray-800 dark:text-gray-200 font-medium">{{comment.author}}</p>

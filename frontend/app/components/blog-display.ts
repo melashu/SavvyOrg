@@ -86,6 +86,11 @@ export default class BlogDisplay extends Component {
   window.location.href = `edit?id=${blogId}`;
 }
 
+ @action
+ navigateToBlogComments(blogId: string) {
+  window.location.href = `blog/comments?blog_id=${blogId}`;
+}
+
   @action
   async navigateToDetail(authorId: string) {
 

@@ -37,6 +37,38 @@ const postComment = async (req, res) => {
   }
 };
 
+// Get all comments for a specific blog
+const getCommentsByBlogId = async (req, res) => {
+  try {
+      const { blog_id } = req.params;
+
+    if (!blog_id) {
+      return res.status(400).json({ message: "Blog ID is required" });
+    }
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const totalComments = await Comment.countDocuments({ blogId: blog_id });
+
+    const comments = await Comment.find({ blogId: blog_id })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    res.status(200).json({
+      comments,
+      totalPages: Math.ceil(totalComments / limit),
+      currentPage: page,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching comments", error: error.message });
+  }
+};
+
+
+
 module.exports = {
-  postComment,
+  postComment, getCommentsByBlogId
 };

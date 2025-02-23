@@ -20,12 +20,12 @@
         {{blog.description}}
       </p>
       <div class="flex items-center gap-4 p-4 bg-white shadow-md rounded-lg">
-        <!-- Profile Image -->
+        {{!-- Profile Image --}}
         <img src="/images/author_profile.png" alt="Profile Photo"
           class="w-10 h-10 rounded-full object-cover border-2 border-blue-500" />
       
         <div class="flex flex-col">
-          <!-- Author Name -->
+          {{!-- Author Name --}}
           <span class="text-lg font-semibold text-blue-600 hover:underline cursor-pointer" {{on "click" (fn
             this.handleAuthorClick blog.authorId._id)}}>
             {{blog.authorId.name}}

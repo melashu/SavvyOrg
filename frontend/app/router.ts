@@ -38,6 +38,10 @@ Router.map(function () {
       this.route('new');
       this.route('view');
       this.route('edit');
+
+      this.route('blog', function() {
+        this.route('comments');
+      });
     });
     this.route('chat');
     this.route('notification');
@@ -56,6 +60,10 @@ Router.map(function () {
       this.route('new');
       this.route('view');
       this.route('edit');
+
+      this.route('blog', function() {
+        this.route('comments');
+      });
     });
   });
 
@@ -82,4 +90,5 @@ Router.map(function () {
   this.route('testimony', function() {
     this.route('post');
   });
+  this.route('blog-comment-table');
 });

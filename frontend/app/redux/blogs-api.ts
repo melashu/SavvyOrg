@@ -37,6 +37,10 @@ export const blogsApi = createApi({
     },
   }),
 }),
+getBlogCommentsByBlogId: builder.query<{ comments: Comment[]; totalPages: number }, { blog_id: string; page: number }>({
+  query: ({ page, blog_id }) => `api/blogs/detail/comments/${blog_id}?page=${page}&limit=10`,
+}),
+
 
     updateBlog: builder.mutation({
       query: ({ id, data }) => ({
@@ -55,5 +59,5 @@ export const blogsApi = createApi({
 });
 
 export const {
-  useFetchBlogsQuery, usePostBlogMutation, useGetBlogsQuery, useUpdateBlogMutation, useDeleteBlogMutation
+  useFetchBlogsQuery, usePostBlogMutation, useGetBlogsQuery, useGetBlogCommentsByBlogIdQuery, useUpdateBlogMutation, useDeleteBlogMutation
 } = blogsApi;
