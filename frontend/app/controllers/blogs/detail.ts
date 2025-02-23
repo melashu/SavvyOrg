@@ -83,47 +83,57 @@ console.log("title");
   }
 
   @action
-  async postComment(event: Event) {
-    event.preventDefault();
-    // Fetch form inputs
-    const name = (document.getElementById('fullName') as HTMLInputElement).value;
-    const email = (document.getElementById('email') as HTMLInputElement).value;
-    const comment = (document.getElementById('comment') as HTMLInputElement).value;
+async postComment(event: Event) {
+  event.preventDefault();
+  
+  // Fetch form inputs
+  const nameInput = document.getElementById('fullName') as HTMLInputElement;
+  const emailInput = document.getElementById('email') as HTMLInputElement;
+  const commentInput = document.getElementById('comment') as HTMLInputElement;
 
-    // Validate inputs
-    if (!name || !email || !comment) {
-      toastr.warning('Please fill in all fields: name, email, and comment!', 'Warning');
-      return;
-    }
-    
-    const newComment: Comment = {
-      fullName: name,
-      email: email,
-      comment: comment,
-      createdAt: new Date().toISOString(),
-    };
-    
-    try {
-      const response = await this.reduxStore.store.dispatch(
-        blogsApi.endpoints.postComment.initiate({
-          blogId: this.blog?._id,
-          comment: newComment,
-        })
-      );
-      
-      console.log('comment post response');
-      console.log(response);
-      console.log('comment post response');
-      
-      this.comments = [...this.comments, newComment];
-      this.commenterName = '';
-      this.commenterEmail = '';
-      this.newComment = '';
-    } catch (err) {
-      console.error('Error posting comment:', err);
-      alert('Failed to post comment. Please try again.');
-    }
+  const name = nameInput.value;
+  const email = emailInput.value;
+  const comment = commentInput.value;
+
+  // Validate inputs
+  if (!name || !email || !comment) {
+    toastr.warning('Please fill in all fields: name, email, and comment!', 'Warning');
+    return;
   }
+
+  const newComment: Comment = {
+    fullName: name,
+    email: email,
+    comment: comment,
+    createdAt: new Date().toISOString(),
+  };
+
+  try {
+    const response = await this.reduxStore.store.dispatch(
+      blogsApi.endpoints.postComment.initiate({
+        blogId: this.blog?._id,
+        comment: newComment,
+      })
+    );
+
+    console.log('comment post response');
+    console.log(response);
+    console.log('comment post response');
+
+    // Update comments list
+    this.comments = [...this.comments, newComment];
+
+    // Clear input fields
+    nameInput.value = '';
+    emailInput.value = '';
+    commentInput.value = '';
+
+  } catch (err) {
+    console.error('Error posting comment:', err);
+    alert('Failed to post comment. Please try again.');
+  }
+}
+
 
   @action
   initializeEditor(element: HTMLElement) {

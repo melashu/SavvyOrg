@@ -220,8 +220,6 @@ const getArticleByTitle = async (req, res) => {
       return res.status(404).json({ message: "Article not found" });
     }
 
-    console.log(blogPost);
-
     res.json(blogPost);
   } catch (error) {
     console.error("Error fetching article:", error);

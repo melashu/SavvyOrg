@@ -1,5 +1,4 @@
 /* eslint-disable prettier/prettier */
-// app/controllers/blogs/detail.ts
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
@@ -22,6 +21,13 @@ interface Blog {
   createdAt: string;
 }
 
+interface Comment {
+  fullName: string;
+  email: string;
+  comment: string;
+  createdAt: string;
+}
+
 export default class BlogsDetailController extends Controller {
   @service reduxStore!: ReduxStoreService;
   @tracked blog: Blog | null = null;
@@ -29,32 +35,43 @@ export default class BlogsDetailController extends Controller {
   @tracked error: string | null = null;
   @tracked blogImage!: string;
   @tracked content = '';
+  @tracked commenterName = '';
+  @tracked commenterEmail = '';
+  @tracked newComment = '';
+  @tracked comments: Comment[] = [];
   quill: Quill | null = null;
 
-
-    // Observe the model change
   set model(value: string) {
     if (value) {
-      this.fetchBlog(value);
+      const title = value.replace(/-/g, ' ');
+      this.fetchBlog(title);
     }
   }
 
   @action
   async fetchBlog(title: string) {
+
+console.log("title");
+console.log(title);
+console.log("title");
+
     this.loading = true;
-try{
+    try {
+      const authorId = localStorage.getItem('authorIdForBlog');
+      const response = await this.reduxStore.store.dispatch(
+        blogsApi.endpoints.fetchBlogByTitle.initiate({ title: title, authorId: authorId })
+      );
 
-  const authorId = localStorage.getItem('authorIdForBlog');
+      console.log("blog detail response data");
+      console.log(response.data);
+      console.log("blog detail response data");
 
-    const response = await this.reduxStore.store.dispatch(
-               blogsApi.endpoints.fetchBlogByTitle.initiate({ title: title, authorId: authorId })
-             );
-        this.blog = response.data;
-
-        this.content = response.data.content;
-          // Set Quill editor content
+      this.blog = response.data;
+      this.content = response.data.content;
+      this.comments = response.data.comments || [];
+      
       if (this.quill) {
-       this.quill.root.innerHTML = this.content;
+        this.quill.root.innerHTML = this.content;
       }
       this.blogImage = `${BASE_URL}/${String(this.blog?.image).replace(/\\/g, '/')}`;
     } catch (err) {
@@ -64,30 +81,73 @@ try{
       this.loading = false;
     }
   }
+
   @action
-initializeEditor(element: HTMLElement) {
-  if (!element) {
-    console.error("Editor container not found.");
-    return;
+  async postComment(event: Event) {
+    event.preventDefault();
+    // Fetch form inputs
+    const name = (document.getElementById('fullName') as HTMLInputElement).value;
+    const email = (document.getElementById('email') as HTMLInputElement).value;
+    const comment = (document.getElementById('comment') as HTMLInputElement).value;
+
+    // Validate inputs
+    if (!name || !email || !comment) {
+      toastr.warning('Please fill in all fields: name, email, and comment!', 'Warning');
+      return;
+    }
+    
+    const newComment: Comment = {
+      fullName: name,
+      email: email,
+      comment: comment,
+      createdAt: new Date().toISOString(),
+    };
+    
+    try {
+      const response = await this.reduxStore.store.dispatch(
+        blogsApi.endpoints.postComment.initiate({
+          blogId: this.blog?._id,
+          comment: newComment,
+        })
+      );
+      
+      console.log('comment post response');
+      console.log(response);
+      console.log('comment post response');
+      
+      this.comments = [...this.comments, newComment];
+      this.commenterName = '';
+      this.commenterEmail = '';
+      this.newComment = '';
+    } catch (err) {
+      console.error('Error posting comment:', err);
+      alert('Failed to post comment. Please try again.');
+    }
   }
 
-  if (!this.quill) {
-    this.quill = new Quill(element, {
-      theme: "snow",
-      modules: {
-        toolbar: false, // Disable toolbar
-      },
-      readOnly: true, // Make it read-only to prevent editing
-    });
+  @action
+  initializeEditor(element: HTMLElement) {
+    if (!element) {
+      console.error("Editor container not found.");
+      return;
+    }
 
-    this.quill.on("text-change", () => {
-      this.content = this.quill?.root.innerHTML || "";
-    });
+    if (!this.quill) {
+      this.quill = new Quill(element, {
+        theme: "snow",
+        modules: {
+          toolbar: false, 
+        },
+        readOnly: true, 
+      });
 
-    // Set initial content
-    if (this.content) {
-      this.quill.root.innerHTML = this.content;
+      this.quill.on("text-change", () => {
+        this.content = this.quill?.root.innerHTML || "";
+      });
+
+      if (this.content) {
+        this.quill.root.innerHTML = this.content;
+      }
     }
   }
 }
-} 
