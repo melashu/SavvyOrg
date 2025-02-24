@@ -221,6 +221,14 @@ const getArticleByTitle = async (req, res) => {
       return res.status(404).json({ message: "Article not found" });
     }
 
+    // Calculate the number of published comments
+    const numberOfPublishedComments = blogPost.comments
+      ? blogPost.comments.length
+      : 0;
+
+    // Add the number of published comments to the blogPost object
+    blogPost.numberOfPublishedComments = numberOfPublishedComments;
+
     res.json(blogPost);
   } catch (error) {
     console.error("Error fetching article:", error);

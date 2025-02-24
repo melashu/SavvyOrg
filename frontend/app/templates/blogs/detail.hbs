@@ -36,21 +36,29 @@
                         <label for="fullName" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Full
                             Name</label>
                         <input type="text" id="fullName"
-                            class="w-full p-3 border rounded-md focus:ring focus:ring-blue-500 outline-none"
+                            class="w-full p-3 placeholder-gray-400 
+                               border-gray-300 bg-white text-black 
+                               dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-md focus:ring focus:ring-blue-500 outline-none"
                             placeholder="Enter your full name" />
                     </div>
                     <div>
                         <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Email
                             Address</label>
                         <input type="email" id="email"
-                            class="w-full p-3 border rounded-md focus:ring focus:ring-blue-500 outline-none"
+                            class="w-full p-3 placeholder-gray-400 
+                               border-gray-300 bg-white text-black 
+                               dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-md focus:ring focus:ring-blue-500 outline-none"
                             placeholder="Enter your email" />
                     </div>
                 </div>
                 <div class="mt-4">
                     <label for="comment" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Comment</label>
-                    <textarea id="comment" class="w-full p-3 border rounded-md focus:ring focus:ring-blue-500 outline-none"
-                        placeholder="Write a comment..." rows="4" ></textarea>
+                    <textarea id="comment" class="w-full p-3 border rounded-md outline-none placeholder-gray-400 
+                               border-gray-300 bg-white text-black 
+                               dark:border-gray-600 dark:bg-gray-800 dark:text-white 
+                               focus:ring focus:ring-blue-500" placeholder="Write a comment..." rows="4">
+                    </textarea>
+
                 </div>
                 <button class="bg-blue-600 text-white px-5 py-2 mt-4 rounded-md hover:bg-blue-700 w-full sm:w-auto"
                     type="button" {{on "click" this.postComment}}>
@@ -59,24 +67,34 @@
             </div>
         
             {{!-- Display Comments --}}
-            <div class="space-y-4">
-                {{#each this.comments as |comment|}}
-                <div
-                    class="p-4 border rounded-lg shadow-md bg-gray-100 dark:bg-[#0A2950] flex flex-col sm:flex-row items-start sm:items-center">
-                    <div
-                        class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
-                        {{get comment.fullName "0"}}
-                    </div>
-                    <div class="sm:ml-4 w-full">
-                        <p class="text-gray-800 dark:text-gray-200 font-medium">{{comment.fullName}}</p>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">{{format-date comment.createdAt}}</p>
-                        <p class="mt-2 text-gray-700 dark:text-gray-300">{{comment.comment}}</p>
-                    </div>
-                </div>
-                {{else}}
-                <p class="text-gray-500 text-center">No comments yet. Be the first to comment!</p>
-                {{/each}}
-            </div>
+<div class="space-y-4">
+    <!-- Display the number of comments -->
+    <div class="text-gray-800 dark:text-gray-200 font-medium">
+        {{#if this.comments.length}}
+        {{this.comments.length}} {{#if (eq this.comments.length 1)}}Comment{{else}}Comments{{/if}}
+        {{else}}
+        No comments yet. Be the first to comment!
+        {{/if}}
+    </div>
+
+    <!-- Loop through comments -->
+    {{#each this.comments as |comment|}}
+    <div
+        class="p-4 border rounded-lg shadow-md bg-gray-100 dark:bg-[#0A2950] flex flex-col sm:flex-row items-start sm:items-center">
+        <div
+            class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
+            {{get comment.fullName "0"}}
+        </div>
+        <div class="sm:ml-4 w-full">
+            <p class="text-gray-800 dark:text-gray-200 font-medium">{{comment.fullName}}</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">{{format-date comment.createdAt}}</p>
+            <p class="mt-2 text-gray-700 dark:text-gray-300">{{comment.comment}}</p>
+        </div>
+    </div>
+    {{else}}
+    <p class="text-gray-500 text-center">No comments yet. Be the first to comment!</p>
+    {{/each}}
+</div>
         </div>
 
         </div>
