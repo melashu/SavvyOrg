@@ -1,0 +1,45 @@
+<div class="flex flex-col flex-1">
+    <InternalHeader />
+    <div class="min-h-screen py-8 grow">
+        <h2 class="text-2xl font-semibold mb-4 text-center">Comments</h2>
+
+        {{#if this.loading}}
+        <p class="text-center text-gray-500">Loading comments...</p>
+        {{else if this.error}}
+        <p class="text-center text-red-500">{{this.error}}</p>
+        {{else if this.filteredComments.length}}
+        <div class="overflow-x-auto">
+            <table class="min-w-full border border-gray-300 bgcolor rounded-lg shadow-md">
+                <thead class="">
+                    <tr>
+                        <th class="border px-4 py-2 text-left">Full Name</th>
+                        <th class="border px-4 py-2 text-left">Email</th>
+                        <th class="border px-4 py-2 text-left">Comment</th>
+                        <th class="border px-4 py-2 text-left">Status</th>
+                        <th class="border px-4 py-2 text-left">Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each this.filteredComments as |comment|}}
+                    <tr class="border-b hover:bg-white hover:dark:bg-black">
+                        <td class="border px-4 py-2">{{comment.fullName}}</td>
+                        <td class="border px-4 py-2">{{comment.email}}</td>
+                        <td class="border px-4 py-2">{{comment.comment}}</td>
+                        <td class="px-4 py-3">
+                            <select data-comment-id={{comment._id}} value={{comment.status}} {{on 'change' this.handleStatusChange}}
+                                class="border rounded-md py-1 px-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                <option value="published" selected={{eq comment.status "published" }}>Published</option>
+                                <option value="archived" selected={{eq comment.status "archived" }}>Archived</option>
+                            </select>
+                        </td>
+                        <td class="border px-4 py-2">{{format-date comment.createdAt}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        {{else}}
+        <p class="text-center text-gray-500">No comments found for this blog.</p>
+        {{/if}}
+    </div>
+</div>

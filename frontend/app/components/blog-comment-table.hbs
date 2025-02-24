@@ -9,8 +9,8 @@
     <p class="text-center text-red-500">{{this.error}}</p>
   {{else if this.filteredComments.length}}
     <div class="overflow-x-auto">
-      <table class="min-w-full border border-gray-300 bg-white rounded-lg shadow-md">
-        <thead class="bg-gray-100">
+      <table class="min-w-full border border-gray-300 bgcolor rounded-lg shadow-md">
+        <thead class="">
           <tr>
             <th class="border px-4 py-2 text-left">Full Name</th>
             <th class="border px-4 py-2 text-left">Email</th>
@@ -21,7 +21,7 @@
         </thead>
         <tbody>
           {{#each this.filteredComments as |comment|}}
-            <tr class="border-b hover:bg-gray-50">
+            <tr class="border-b hover:bg-white hover:dark:bg-black">
               <td class="border px-4 py-2">{{comment.fullName}}</td>
               <td class="border px-4 py-2">{{comment.email}}</td>
               <td class="border px-4 py-2">{{comment.comment}}</td>
@@ -32,7 +32,7 @@
                   <option value="archived" selected={{eq comment.status "archived" }}>Archived</option>
                 </select>
               </td>
-              <td class="border px-4 py-2">{{comment.createdAt}}</td>
+              <td class="border px-4 py-2">{{format-date comment.createdAt}}</td>
             </tr>
           {{/each}}
         </tbody>
