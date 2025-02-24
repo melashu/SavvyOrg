@@ -10,7 +10,11 @@ const {
   deleteBlog,
 } = require("../controllers/blogController");
 
-const { postComment, getCommentsByBlogId } = require("../controllers/commentController");
+const {
+  postComment,
+  getCommentsByBlogId,
+  changeCommentStatus,
+} = require("../controllers/commentController");
 
 const { upload } = require("../middleware/imageUpload.js");
 
@@ -36,6 +40,9 @@ router.get("/articles/:id", getArticleById);
 router.get("/articles/detail/title", getArticleByTitle);
 
 router.get("/detail/comments/:blog_id", getCommentsByBlogId);
+
+// Route to change the status of a comment
+router.patch("/detail/comments/:commentId/status", changeCommentStatus);
 
 // Route to update blog by id
 router.put("/:id", upload.single("image"), updateBlogById);

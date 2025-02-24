@@ -41,7 +41,13 @@ getBlogCommentsByBlogId: builder.query<{ comments: Comment[]; totalPages: number
   query: ({ page, blog_id }) => `api/blogs/detail/comments/${blog_id}?page=${page}&limit=10`,
 }),
 
-
+    changeCommentStatus: builder.mutation({
+      query: ({ commentId, status }) => ({
+        url: `api/blogs/detail/comments/${commentId}/status`,
+        method: "PATCH",
+        body: { status },
+      }),
+    }),
     updateBlog: builder.mutation({
       query: ({ id, data }) => ({
         url: `api/blogs/${id}`,
@@ -59,5 +65,5 @@ getBlogCommentsByBlogId: builder.query<{ comments: Comment[]; totalPages: number
 });
 
 export const {
-  useFetchBlogsQuery, usePostBlogMutation, useGetBlogsQuery, useGetBlogCommentsByBlogIdQuery, useUpdateBlogMutation, useDeleteBlogMutation
+  useFetchBlogsQuery, usePostBlogMutation, useGetBlogsQuery, useGetBlogCommentsByBlogIdQuery, useChangeCommentStatusMutation, useUpdateBlogMutation, useDeleteBlogMutation
 } = blogsApi;

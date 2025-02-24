@@ -3,14 +3,21 @@ const Blog = require("../models/blog");
 // Create a new blog post
 const createBlog = async (req, res) => {
   try {
-    const { title, authorId, content, status } = req.body;
+    const { title, description, authorId, content, status } = req.body;
     // Ensure the image field is correctly accessed from req.files
     let image = "";
     if (req.file) {
       image = req.file.path;
     }
 
-    const newBlog = new Blog({ title, authorId, content, status, image });
+    const newBlog = new Blog({
+      title,
+      description,
+      authorId,
+      content,
+      status,
+      image,
+    });
     await newBlog.save();
 
     res.json({ message: "blog_created", blog: newBlog });
@@ -70,32 +77,62 @@ const getAllPublishedArticles = async (req, res) => {
     const filter = { status: "published" };
     if (authorId) filter.authorId = authorId;
 
-    // Use selective fields to limit returned data and `lean()` for performance
+    // Fetch paginated blogs
     const blogQuery = Blog.find(filter)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
-      .select("title content createdAt") // Only select necessary fields
+      .select("title description content createdAt authorId")
       .populate("authorId", "name")
       .lean();
 
-    // Conditional countDocuments execution only if it's the first page
+    // Count total blogs (only if on first page)
     const totalBlogsPromise =
       page === 1 ? Blog.countDocuments(filter) : Promise.resolve(null);
 
-    // Run both queries in parallel
-    const [blogs, totalBlogs] = await Promise.all([
+    // Aggregate total published blogs by each author
+    const totalPublishedByAuthorPromise = Blog.aggregate([
+      { $match: { status: "published" } },
+      { $group: { _id: "$authorId", totalPublished: { $sum: 1 } } },
+      {
+        $lookup: {
+          from: "users",
+          localField: "_id",
+          foreignField: "_id",
+          as: "author",
+        },
+      },
+      { $unwind: "$author" },
+      { $project: { authorName: "$author.name", totalPublished: 1 } },
+    ]);
+
+    // Run queries in parallel
+    const [blogs, totalBlogs, totalPublishedByAuthor] = await Promise.all([
       blogQuery,
       totalBlogsPromise,
+      totalPublishedByAuthorPromise,
     ]);
+
+    // Create a map for quick lookup of totalPublished by authorId
+    const totalPublishedMap = totalPublishedByAuthor.reduce((acc, item) => {
+      acc[item._id.toString()] = item.totalPublished;
+      return acc;
+    }, {});
+
+    // Add totalPublished to each blog entry based on authorId
+    const blogsWithTotalPublished = blogs.map((blog) => ({
+      ...blog,
+      totalPublished: totalPublishedMap[blog.authorId._id.toString()] || 0,
+    }));
 
     const totalPages = totalBlogs ? Math.ceil(totalBlogs / limit) : undefined;
 
     res.status(200).json({
-      blogs,
+      blogs: blogsWithTotalPublished,
       currentPage: page,
       totalPages,
       totalBlogs,
+      totalPublishedByAuthor,
     });
   } catch (error) {
     res.status(500).json({ error: "Error fetching blogs" });
@@ -107,7 +144,7 @@ const getBlogById = async (req, res) => {
     // Retrieve only the necessary fields with lean() for better performance
     const blogPost = await Blog.findById(req.params.id)
       .lean()
-      .select("title content author createdAt");
+      .select("title description content author createdAt");
 
     if (!blogPost) {
       return res.status(404).json({ message: "Blog post not found" });
@@ -140,7 +177,7 @@ const getArticleById = async (req, res) => {
     // Query the database with lean and select
     const blogPost = await Blog.findById(articleId)
       .lean()
-      .select("title content author image createdAt");
+      .select("title description content author image createdAt");
 
     if (!blogPost) {
       return res.status(404).json({ message: "Article not found" });
@@ -183,8 +220,6 @@ const getArticleByTitle = async (req, res) => {
       return res.status(404).json({ message: "Article not found" });
     }
 
-    console.log(blogPost);
-
     res.json(blogPost);
   } catch (error) {
     console.error("Error fetching article:", error);
@@ -194,7 +229,7 @@ const getArticleByTitle = async (req, res) => {
 
 const updateBlogById = async (req, res) => {
   console.log("Body Data", req.body);
-  const { title, authorId, content, status } = req.body;
+  const { title, description, authorId, content, status } = req.body;
   // Ensure the image field is correctly accessed from req.files
   let image = "";
   if (req.file) {
@@ -203,7 +238,14 @@ const updateBlogById = async (req, res) => {
   try {
     const updatedBlog = await Blog.findByIdAndUpdate(
       req.params.id,
-      { title, authorId, content, status, ...(image && { image }) },
+      {
+        title,
+        description,
+        authorId,
+        content,
+        status,
+        ...(image && { image }),
+      },
       { new: true }
     );
 

@@ -212,6 +212,7 @@ const getArticleByTitle = async (req, res) => {
       .lean()
       .populate({
         path: "comments",
+        match: { status: "published" },
         select: "fullName email comment  createdAt",
       })
       .select("title content author image comments createdAt");

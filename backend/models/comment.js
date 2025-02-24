@@ -5,6 +5,7 @@ const commentSchema = new mongoose.Schema({
   fullName: { type: String, required: true },
   email: { type: String, required: true },
   comment: { type: String, required: true },
+  status: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
 });
 
