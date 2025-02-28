@@ -21,9 +21,13 @@ export default class RegisterController extends Controller {
     const registerButton = document.querySelector('button[type="submit"]') as HTMLButtonElement;
     if (registerButton) registerButton.disabled = true;
     // Fetch form inputs
-    const name = (document.getElementById('fullName') as HTMLInputElement).value;
-    const email = (document.getElementById('email') as HTMLInputElement).value;
-    const password = (document.getElementById('password') as HTMLInputElement).value;
+  const nameInput = document.getElementById('fullName') as HTMLInputElement;
+  const emailInput = document.getElementById('email') as HTMLInputElement;
+  const passwordInput = document.getElementById('password') as HTMLInputElement;
+
+  const name = nameInput.value;
+  const email = emailInput.value;
+  const password = passwordInput.value;
 
     // Validate inputs
     if (!name || !email || !password) {
@@ -41,9 +45,15 @@ export default class RegisterController extends Controller {
       // Handle success
       if (userData.message === 'User registered successfully') {
         toastr.success('Registration successful! Please check your email');
-      } else {
-        toastr.error('Registration failed. Please check your details.', 'Error');
-        console.error('Registration error:', result.error);
+      nameInput.value = '';
+      emailInput.value = '';
+      passwordInput.value = '';
+      } else if(userData.message === 'email_registered') {
+        toastr.error('this email exists');
+      }
+      else{
+          toastr.error('Registration error please check your details.');
+          console.error('Registration error:', result.error);
       }
     } catch (error) {
       toastr.error('An unexpected error occurred during registration.', 'Error');

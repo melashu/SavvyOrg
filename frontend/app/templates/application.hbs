@@ -1,20 +1,52 @@
-{{!-- <Header/>
+<!DOCTYPE html>
+<html lang="en">
 
-<main>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- 🏷️ Dynamic Meta Tags (Title & Description) -->
+  <title>{{this.headData.title}}</title>
+  <meta name="description" content="{{this.headData.description}}">
+
+  <!-- 🏷️ Open Graph Meta Tags (for social sharing) -->
+  <meta property="og:title" content="{{this.headData.title}}">
+  <meta property="og:description" content="{{this.headData.description}}">
+  <meta property="og:image" content="{{this.headData.image}}">
+  <meta property="og:url" content="{{this.headData.url}}">
+  <meta property="og:type" content="website">
+
+  <!-- 🏷️ Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{this.headData.title}}">
+  <meta name="twitter:description" content="{{this.headData.description}}">
+  <meta name="twitter:image" content="{{this.headData.image}}">
+
+  <!-- 🏷️ Structured Data (JSON-LD for SEO) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "{{this.headData.title}}",
+    "url": "{{this.headData.url}}",
+    "logo": "{{this.headData.image}}"
+  }
+  </script>
+
+  {{! 🏷️ Additional SEO Enhancements }}
+  <link rel="canonical" href="{{this.headData.url}}">
+</head>
+
+<body>
+
+  <Header />
+
+  <main>
     {{outlet}}
-</main>
+  </main>
 
-<Footer/> --}}
+  <Footer />
 
+</body>
 
-{{#if this.isFastBoot}}
-  <meta name="fastboot-enabled" content="true">
-{{/if}}
-
-<Header/>
-
-<main>
-    {{outlet}}
-</main>
-
-<Footer/>
+</html>

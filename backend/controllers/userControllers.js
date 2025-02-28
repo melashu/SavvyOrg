@@ -252,7 +252,7 @@ const registerUser = asyncHandler(async (req, res) => {
   const userExists = await User.findOne({ email });
 
   if (userExists) {
-    return res.json({ message: "Email already registered" });
+    return res.json({ message: "email_registered" });
   }
 
   const avatar = generateGravatar(email);
