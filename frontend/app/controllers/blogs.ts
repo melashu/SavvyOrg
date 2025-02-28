@@ -31,6 +31,7 @@ export default class BlogsController extends Controller {
   @tracked blogs: Blog[] = [];
   @tracked isLoading: boolean = true;
   @tracked errorMessage: string | null = null;
+  @tracked noData: string | null = null;
   @tracked currentPage: number = 1;
   @tracked totalPages: number = 1;
   @tracked selectedAuthor: string | null = null;
@@ -51,6 +52,10 @@ export default class BlogsController extends Controller {
         blogsApi.endpoints.fetchBlogs.initiate(params)
       );
       const data = await response.data;
+
+if(data == undefined){
+  this.noData = 'No Data';
+}else{
       this.totalPages = data.totalPages;
       this.blogs = data.blogs.map((blog: any) => ({
         _id: blog._id,
@@ -63,6 +68,8 @@ export default class BlogsController extends Controller {
         totalPublished: blog.totalPublished,
         createdAt: blog.createdAt,
       }));
+
+    }
     } catch (err) {
       console.error('Error fetching blogs:', err);
       this.errorMessage = 'Failed to load blog posts.';

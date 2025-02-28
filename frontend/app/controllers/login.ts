@@ -16,14 +16,24 @@ export default class LoginController extends Controller {
   @service router!: RouterService;
   @service session!: SessionService;
 
+  isSubmitting = false;
+
   @action
   async handleLogin(event: Event) {
     event.preventDefault();
+    if (this.isSubmitting) return;
+    this.isSubmitting = true;
+
+    const loginButton = document.querySelector('button[type="submit"]') as HTMLButtonElement;
+    if (loginButton) loginButton.disabled = true;
+
     const email = (document.getElementById('email') as HTMLInputElement).value;
     const password = (document.getElementById('password') as HTMLInputElement).value;
 
     if (!email || !password) {
       toastr.warning('Please fill in both email and password!', 'Warning');
+       this.isSubmitting = false;
+       if (loginButton) loginButton.disabled = false;
       return;
     }
 
@@ -32,6 +42,10 @@ export default class LoginController extends Controller {
       const result = await this.reduxStore.store.dispatch(
         authApi.endpoints.login.initiate({ email, password })
       );
+
+
+      console.log("Login data from api: ", result );
+
 
       if ('error' in result && result.error) {
         const error = result.error;
@@ -76,6 +90,9 @@ export default class LoginController extends Controller {
     } catch (error) {
       toastr.error('An unexpected error occurred.', 'Error');
       console.error('Login error:', error);
+    }finally {
+      this.isSubmitting = false;
+      if (loginButton) loginButton.disabled = false;
     }
   }
 

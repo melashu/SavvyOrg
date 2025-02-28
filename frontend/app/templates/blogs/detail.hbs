@@ -68,7 +68,7 @@
         
             {{!-- Display Comments --}}
 <div class="space-y-4">
-    <!-- Display the number of comments -->
+    {{!-- Display the number of comments --}}
     <div class="text-gray-800 dark:text-gray-200 font-medium">
         {{#if this.comments.length}}
         {{this.comments.length}} {{#if (eq this.comments.length 1)}}Comment{{else}}Comments{{/if}}
@@ -77,7 +77,7 @@
         {{/if}}
     </div>
 
-    <!-- Loop through comments -->
+    {{!-- Loop through comments --}}
     {{#each this.comments as |comment|}}
     <div
         class="p-4 border rounded-lg shadow-md bg-gray-100 dark:bg-[#0A2950] flex flex-col sm:flex-row items-start sm:items-center">

@@ -5,14 +5,21 @@ import { action } from '@ember/object';
 import { authApi } from '../redux/auth-api';
 import ReduxStoreService from 'frontend/services/redux-store';
 import RouterService from '@ember/routing/router-service';
+import toastr from 'toastr';
 
 export default class RegisterController extends Controller {
   @service reduxStore!: ReduxStoreService;
   @service router!: RouterService; // Inject Ember Router Service
 
+  isSubmitting = false;
+
   @action
   async handleRegister(event: Event) {
     event.preventDefault();
+    if (this.isSubmitting) return;
+    this.isSubmitting = true;
+    const registerButton = document.querySelector('button[type="submit"]') as HTMLButtonElement;
+    if (registerButton) registerButton.disabled = true;
     // Fetch form inputs
     const name = (document.getElementById('fullName') as HTMLInputElement).value;
     const email = (document.getElementById('email') as HTMLInputElement).value;
@@ -20,27 +27,30 @@ export default class RegisterController extends Controller {
 
     // Validate inputs
     if (!name || !email || !password) {
-      alert('Please fill in all fields: name, email, and password!');
+      toastr.warning('Please fill in all fields: name, email, and password!', 'Warning');
+      this.isSubmitting = false;
+      if (registerButton) registerButton.disabled = false;
       return;
     }
-
     try {
       // Dispatch the register mutation using Redux store
       const result = await this.reduxStore.store.dispatch(
         authApi.endpoints.register.initiate({ name, email, password })
       );
       const userData = result.data;
-
       // Handle success
       if (userData.message === 'User registered successfully') {
-        alert('Registration successful! Redirecting...');
+        toastr.success('Registration successful! Please check your email');
       } else {
-        alert('Registration failed. Please check your details.');
+        toastr.error('Registration failed. Please check your details.', 'Error');
         console.error('Registration error:', result.error);
       }
     } catch (error) {
-      alert('An unexpected error occurred during registration.');
+      toastr.error('An unexpected error occurred during registration.', 'Error');
       console.error('Registration error:', error);
+    }finally {
+      this.isSubmitting = false;
+      if (registerButton) registerButton.disabled = false;
     }
   }
 }

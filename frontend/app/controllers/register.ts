@@ -11,9 +11,15 @@ export default class RegisterController extends Controller {
   @service reduxStore!: ReduxStoreService;
   @service router!: RouterService; // Inject Ember Router Service
 
+  isSubmitting = false;
+
   @action
   async handleRegister(event: Event) {
     event.preventDefault();
+    if (this.isSubmitting) return;
+    this.isSubmitting = true;
+    const registerButton = document.querySelector('button[type="submit"]') as HTMLButtonElement;
+    if (registerButton) registerButton.disabled = true;
     // Fetch form inputs
     const name = (document.getElementById('fullName') as HTMLInputElement).value;
     const email = (document.getElementById('email') as HTMLInputElement).value;
@@ -22,6 +28,8 @@ export default class RegisterController extends Controller {
     // Validate inputs
     if (!name || !email || !password) {
       toastr.warning('Please fill in all fields: name, email, and password!', 'Warning');
+      this.isSubmitting = false;
+      if (registerButton) registerButton.disabled = false;
       return;
     }
     try {
@@ -40,6 +48,9 @@ export default class RegisterController extends Controller {
     } catch (error) {
       toastr.error('An unexpected error occurred during registration.', 'Error');
       console.error('Registration error:', error);
+    }finally {
+      this.isSubmitting = false;
+      if (registerButton) registerButton.disabled = false;
     }
   }
 }
