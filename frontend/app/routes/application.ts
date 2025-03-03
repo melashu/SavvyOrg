@@ -7,10 +7,12 @@ import { service } from '@ember/service';
 export default class ApplicationRoute extends Route {
 
 
-   @service headData: any;
+  @service headData: any;
 
   beforeModel() {
-    this.headData.title = "Savvy Bridge Software Company";
-    this.headData.description = "Savvy Bridge Software Company";
+    this.headData.title = "My SEO Optimized Ember App";
+    this.headData.description = "An Ember.js app fully optimized for SEO.";
+    this.headData.image = "https://example.com/my-image.jpg";
+    this.headData.url = "https://example.com";
   }
 }

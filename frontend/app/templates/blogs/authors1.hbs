@@ -66,16 +66,18 @@
             {{/each}}
         </div>
         {{/if}}
-        {{!-- <div class="flex justify-center mt-8 space-x-4">
-            <button {{on "click" (fn this.handlePageChange (dec this.page))}} disabled={{eq this.page 1}}
-                class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 disabled:bg-gray-300 transition-all">
+        <div class="flex justify-center mt-8 space-x-4">
+            <button disabled={{eq this.page 1}}
+                class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 disabled:bg-gray-300 transition-all"
+                type="button" {{on "click" (fn this.handlePageChange (dec this.page))}}>
                 Previous
             </button>
             <span class="text-lg font-semibold">Page {{this.page}} of {{this.totalPages}}</span>
-            <button {{on "click" (fn this.handlePageChange (inc this.page))}} disabled={{eq this.page this.totalPages}}
-                class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 disabled:bg-gray-300 transition-all">
+            <button disabled={{eq this.page this.totalPages}}
+                class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 disabled:bg-gray-300 transition-all"
+                type="button" {{on "click" (fn this.handlePageChange (inc this.page))}}>
                 Next
             </button>
-        </div> --}}
+        </div>
     </main>
 </div>

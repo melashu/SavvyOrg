@@ -91,4 +91,5 @@ Router.map(function () {
     this.route('post');
   });
   this.route('blog-comment-table');
+  this.route('sitemap');
 });

@@ -10,3 +10,7 @@ export default class App extends Application {
 }
 
 loadInitializers(App, config.modulePrefix);
+
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('Ember App is initializing...');
+});
